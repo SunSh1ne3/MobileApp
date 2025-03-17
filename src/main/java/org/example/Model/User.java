@@ -7,18 +7,13 @@ import jakarta.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name="id_user")
 
     private Long id;
     private String username;
     private String password;
     private String numberPhone;
-    private String order;
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
+    private Long typeOrder;
 
     public Long getId() {
         return id;
@@ -48,11 +43,6 @@ public class User {
         this.numberPhone = numberPhone;
     }
 
-    public String getOrder() {
-        return order;
-    }
-
-    public void setOrder(String order) {
-        this.order = order;
-    }
+    public Long getTypeOrder() { return typeOrder; }
+    public void setTypeOrder(Long typeOrder) { this.typeOrder = typeOrder; }
 }
