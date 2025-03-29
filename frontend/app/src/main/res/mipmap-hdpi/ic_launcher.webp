@@ -1,0 +1,46 @@
+import Cake.LevelSpecific.SnowGlobe.Boatsled.BoatsledComponent;
+
+class UBoatsledLandingAfterChimneyCapability : UHazeCapability
+{
+	default CapabilityTags.Add(BoatsledTags::Boatsled);
+
+	default TickGroup = ECapabilityTickGroups::ActionMovement;
+	default TickGroupOrder = 66;
+
+	default CapabilityDebugCategory = n"Boatsled";
+
+	AHazePlayerCharacter PlayerOwner;
+	ABoatsled Boatsled;
+
+	UBoatsledComponent BoatsledComponent;
+	UHazeSplineComponent TrackSpline;
+
+	UFUNCTION(BlueprintOverride)
+	void Setup(FCapabilitySetupParams SetupParams)
+	{
+		PlayerOwner = Cast<AHazePlayerCharacter>(Owner);
+		BoatsledComponent = UBoatsledComponent::Get(Owner);
+	}
+
+	UFUNCTION(BlueprintOverride)
+	EHazeNetworkActivation ShouldActivate() const
+	{
+		if(BoatsledComponent.IsLandingAfterChimneyFallthrough())
+			return EHazeNetworkActivation::ActivateLocal;
+
+		return EHazeNetworkActivation::DontActivate;
+	}
+
+	UFUNCTION(BlueprintOverride)
+	void OnActivated(FCapabilityActivationParams ActivationParams)
+	{
+		Boatsled = BoatsledComponent.Boatsled;
+		TrackSpline = BoatsledComponent.TrackSpline;
+
+		// Add height offset to camera for it to not collide with the track's slope
+		PlayerOwner.ApplyCameraSettings(Boatsled.TunnelCameraSpringArmSettings, 2.f, this);
+
+		// Increase boatsled max speed
+		BoatsledComponent.SetBoatsledMaxSpeed(Boatsled.MaxSpeed * 1.34f);
+
+		// Carry chimney f

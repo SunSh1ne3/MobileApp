@@ -1,0 +1,134 @@
+ttachedDamageableComps.Num() > 0 && AttachedDamageableComps[0] != nullptr)
+					{
+						AttachedDamageableComps[0].NetExplode(false);
+					}
+					else
+					{
+						Print("bomb bridge has no bomb attached?");
+					}
+				}
+
+			}
+			else
+			{
+				Explode(HitLocation, Velocity);
+			}
+		}
+	}
+
+	bool CanTakeDamage()const
+	{
+		if(bExploding)
+			return false;
+		if(!bCanTakeDamage)
+			return false;
+		return true;
+	}
+
+	void DisableDamageTaking()
+	{
+		bCanTakeDamage = false;
+	}
+
+	UFUNCTION(NotBlueprintCallable)
+	void EnableDamageTaking()
+	{
+		bCanTakeDamage = true;
+	}
+
+	UFUNCTION(NetFunction)
+	void NetExplode(bool bNullDelay)
+	{
+		if(bNullDelay)
+			DelayBeforeDestroyed = 0.0f;
+
+		Explode();
+	}
+
+	UFUNCTION()
+	void Explode(FVector HitLocation = FVector(0.f), FVector Velocity = FVector(0.f))
+	{
+		if(bExploding)
+			return;
+
+		bExploding = true;
+		
+		OnExploded.Broadcast();
+
+		if(PlayerGivingDamage != nullptr && bPlayDefeatedBark)
+		{
+			FName EventName = PlayerGivingDamage.IsMay() ? n"FoghornDBPlayRoomGoldbergEnemyDefeatedGenericMay" : n"FoghornDBPlayRoomGoldbergEnemyDefeatedGenericCody";
+
+			PlayFoghornVOBankEvent(VOBank, EventName);
+		}
+		
+		OnBreakPirateBlockers.Broadcast(HitLocation, Velocity);
+		
+		if(ExplosionEffect != nullptr && !bDelayExplosionEffect)
+		{
+			auto NiagaraComponent = Niagara::SpawnSystemAtLocation(ExplosionEffect, Owner.ActorLocation + ExplosionOffset);
+			NiagaraComponent.SetTranslucentSortPriority(3);
+		}
+			
+		if(DelayBeforeDestroyed > 0.0f)
+		{ 
+			System::SetTimer(this, n"DelayedDestroy", DelayBeforeDestroyed, false);
+		}
+		else if(bDestroyAfterExploding)
+		{
+			OnDestroyed.Broadcast();
+			ExplodeAttachActors();
+			Owner.DestroyActor();
+
+			AHazeActor HazeOwner;
+
+			HazeOwner = Cast<AHazeActor>(Owner);
+
+			if (HazeOwner != nullptr) 
+			{
+				if (!HazeOwner.IsActorDisabled())
+					HazeOwner.DisableActor(this);	
+			}
+		}
+		else if(!bDestroyAfterExploding)
+		{
+			ExplodeAttachActors();
+			DelayedDestroy();
+		}
+	}
+
+	UFUNCTION()
+	void RestoreHealth()
+	{
+		CurrentHealth = MaximumHealth;
+		OnHealthRestored.Broadcast();
+	}
+
+	void ExplodeAttachActors()
+	{
+		if(AttachedDamageableComps.Num() > 0)
+		{
+			for (int i = 0; i < AttachedDamageableComps.Num(); i++)
+			{
+				if(AttachedDamageableComps[i] != nullptr && AttachedDamageableComps[i].Owner != nullptr)
+				{
+					bool bNullDelay = false;
+					if(bIsBombBox && AttachedDamageableComps[i].bIsBombBox)
+						bNullDelay = true;
+					
+					AttachedDamageableComps[i].NetExplode(bNullDelay);
+				}
+			}
+			AttachedDamageableComps.Reset();
+		}
+	}
+
+	UFUNCTION()
+	void DelayedDestroy()
+	{
+		if(ExplosionEffect != nullptr && bDelayExplosionEffect)
+			Niagara::SpawnSystemAtLocation(ExplosionEffect, Owner.ActorLocation + ExplosionOffset);
+
+		OnDestroyed.Broadcast();
+
+		if(HasContr

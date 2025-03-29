@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/PageStyle">
+
+    <TextView
+        android:id="@+id/tv_HelloText"
+        android:text="@string/helloText"
+
+        style="@style/MainText"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_EnterText"
+        android:text="@string/enterTitle"
+
+        style="@style/MainText"
+
+        android:layout_marginTop="128dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_HelloText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </TextView>
+
+
+    <LinearLayout
+        android:id="@+id/FormEdit"
+        style="@style/StyleLinearField"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_EnterText">
+
+        <EditText
+            android:id="@+id/et_EmailField"
+            style="@style/TextField"
+            android:hint="@string/enter_phone"
+            app:layout_constraintBottom_toTopOf="@id/FormEdit"
+            app:layout_constraintTop_toBottomOf="@id/FormEdit">
+
+        </EditText>
+
+        <EditText
+            android:id="@+id/et_PasswordField"
+            style="@style/TextField"
+            android:hint="@string/enter_password"
+
+            app:layout_constraintBottom_toTopOf="@id/FormEdit"
+            app:layout_constraintTop_toBottomOf="@id/FormEdit">
+
+        </EditText>
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/EnterButton"
+        android:text="@string/enter"
+
+        style="@style/StyleEnterButton"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/FormEdit">
+
+    </Button>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="small_margin">32dp</dimen>
+    <dimen name="base_margin">64dp</dimen>
+    <dimen name="big_margin">128dp</dimen>
+
+
+    <dimen name="base_text_size_field">18sp</dimen>
+    <dimen name="base_hello_text_size">28sp</dimen>
+    <dimen name="text_size_on_button">22sp</dimen>
+    <dimen name="name_product_in_recycle">24sp</dimen>
+</resources>

@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">List Phone</string>
+
+    <string name="info_start">Подождите, система загружается.</string>
+
+    <string name="helloText">Добро пожаловать!</string>
+    <string name="enterTitle">Вход</string>
+    <string name="registrationText">Регистрация</string>
+
+    <string name="by_number">По номеру</string>
+    <string name="by_email">По email</string>
+
+    <string name="enter_email">Введите email</string>
+    <string name="enter_phone">Введите номер телефона</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="confirm_password">Повторите пароль</string>
+    <string name="enter_email_or_phone">Введите email/телефон</string>
+
+    <string name="enter">Войти</string>
+    <string name="registration">Зарегестироваться</string>
+
+
+    <string name="msg_error_PlusInNumber">Отсутствует + в номере телефона</string>
+    <string name="msg_error_Mail">Недопустимый адрес, отсутствует @ в email</string>
+    <string name="msg_error_SizePassword">Длина пароля менее 8 символов</string>
+    <string name="MSG_ERROR_MISMATCH_PASSWORD">Пароли не совпадают</string>
+    <string name="msg_error_UserExists">Пользователь с такой почтой уже зарегистрирован</string>
+    <string name="MSG_ERROR_EMPTY_FIELD">Некоторые поля пустые</string>
+    <string name="msg_error">Неверный логин и пароль</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="launch_price">Стартовая цена: </string>
+    <string name="launch_date">Дата запуска: </string>
+    <string name="camera_score">Оценка камеры: </string>
+
+    // Toolbar
+    <string name="Find">Поиск</string>
+    <string name="Rent">Аренда</string>
+    <string name="Profile">Профиль</string>
+
+
+
+    <string name="OutFromAccount">Выйти из аккаунта</string>
+    <string name="DeleteAccount">Удалить аккаунт</string>
+    <string name="Enter"> Войдите</string>
+    <string name="QuestionAuth">Уже есть аккаунт?</string>
+
+
+</resources>

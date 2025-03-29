@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/PageStyle">
+
+    <TextView
+        android:id="@+id/tv_HelloText"
+        android:text="@string/helloText"
+
+        style="@style/MainText"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_RegistrText"
+        android:text="@string/registrationText"
+
+        style="@style/MainText"
+
+        app:layout_constraintTop_toBottomOf="@+id/tv_HelloText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </TextView>
+
+
+    <LinearLayout
+        android:id="@+id/ll_FormEdit"
+        style="@style/StyleLinearField"
+
+        app:layout_constraintTop_toBottomOf="@id/tv_RegistrText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="100dp">
+
+
+        <EditText
+            android:id="@+id/et_NumberPhoneField"
+            style="@style/TextField"
+            android:hint="@string/enter_phone"
+            android:inputType="textPhonetic"/>
+
+        <EditText
+            android:id="@+id/et_PasswordField"
+            style="@style/TextField"
+            android:hint="@string/enter_password"/>
+
+        <EditText
+            android:id="@+id/et_RepeatPasswordField"
+            style="@style/TextField"
+            android:hint="@string/confirm_password"/>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/RegistrationButton"
+        android:text="@string/registration"
+        style="@style/StyleEnterButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_FormEdit"/>
+
+    <LinearLayout
+        android:id="@+id/ll_GoToAuth"
+        style="@style/StyleChoseButton"
+
+        app:layout_constraintTop_toBottomOf="@id/RegistrationButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:id="@+id/tv_QuestionAuthorisation"
+            android:text="@string/QuestionAuth"
+            style="@style/StyleChoseButton"/>
+        <TextView
+            android:id="@+id/tv_GoToAuthorisation"
+            android:text="@string/Enter"
+            style="@style/StyleChoseButton"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

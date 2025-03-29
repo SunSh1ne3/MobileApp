@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "590804605176",
+    "project_id": "phonerating-mihail-savelyev",
+    "storage_bucket": "phonerating-mihail-savelyev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590804605176:android:a5d4b24d12492e78aa030d",
+        "android_client_info": {
+          "package_name": "com.savelyev.MobileApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvGcCrXVZasX1iDykUjaAQ6dIOEGlU3qs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

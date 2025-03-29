@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.savelyev.MobileApp.Activity.ListFragment"
+        android:label="ListFragment">
+        <action
+            android:id="@+id/action_listFragment_to_cardElementFragment"
+            app:destination="@id/cardElementFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cardElementFragment"
+        android:name="com.savelyev.MobileApp.Activity.CardElementFragment"
+        android:label="CardElementFragment">
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.savelyev.MobileApp.Activity.ProfileFragment"
+        android:label="ProfileFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.savelyev.MobileApp.Activity.SplashFragment"
+        android:label="SplashFragment">
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_listFragment"
+            app:destination="@id/listFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.savelyev.MobileApp.Activity.LoginFragment"
+        android:label="LoginFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.savelyev.MobileApp.Activity.RegistrationFragment"
+        android:label="RegistrationFragment">
+    </fragment>
+
+
+</navigation>
