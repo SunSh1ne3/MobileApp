@@ -6,6 +6,7 @@ import org.example.Model.User;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Service
@@ -25,8 +26,8 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(user.getNumberPhone())
                 .claim("userId", user.getId())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setIssuedAt(Date.from(Instant.now()))
+                .setExpiration(Date.from(Instant.now().plusMillis(EXPIRATION_TIME)))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
