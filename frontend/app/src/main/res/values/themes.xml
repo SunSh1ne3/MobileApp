@@ -13,7 +13,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/base_hello_text_size</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:layout_marginTop">@dimen/base_margin</item>
     </style>
 
@@ -21,7 +21,7 @@
     <style name="TextField" parent="Base.Theme.Labs">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColorHint">@color/white</item>
+        <item name="android:textColorHint">@color/black</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/base_text_size_field</item>
     </style>
@@ -30,7 +30,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:padding">12dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:gravity">center</item>
@@ -52,7 +52,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_on_button</item>
-        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:backgroundTint">@color/blue</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:layout_marginBottom">@dimen/big_margin</item>
 
@@ -63,7 +63,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:background">@drawable/background</item>
     </style>
 
     <style name="RecycleTextView" parent="Base.Theme.Labs">

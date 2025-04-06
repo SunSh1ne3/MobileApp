@@ -3,8 +3,8 @@
 
     <string name="info_start">Подождите, система загружается.</string>
 
-    <string name="helloText">Добро пожаловать!</string>
-    <string name="enterTitle">Вход</string>
+    <string name="helloText"></string>
+    <string name="enterTitle">Авторизация</string>
     <string name="registrationText">Регистрация</string>
 
     <string name="by_number">По номеру</string>

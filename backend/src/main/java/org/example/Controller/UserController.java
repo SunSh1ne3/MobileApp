@@ -36,9 +36,6 @@ public class UserController {
         catch(Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-
     }
-
-
 
 }

@@ -18,8 +18,6 @@ public class UserService {
     private static final int DEFAULT_LENGTH_USERNAME = 15;
     @Autowired
     private UserRepository userRepository;
-
-    //Шифрование пароля
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
