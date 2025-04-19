@@ -1,189 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".CardElementFragment"
     android:padding="16dp">
-
-    <!-- заменить на более адаптивный (половина экрана) -->
-    <ImageView
-        android:id="@+id/ImagesBike"
+    <LinearLayout
+        android:id="@+id/rpw03b4uh3ig"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="@drawable/profile_icon"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:orientation="vertical"
+
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <TextView
-        android:id="@+id/NameBike"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-
-        app:layout_constraintTop_toBottomOf="@+id/ImagesBike"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/NameBike"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_hour"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/blue"
-            android:layout_margin="16dp"
-            app:cardCornerRadius="16dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/image_element"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:background="#D9D9D9"
+            android:layout_marginBottom="24dp"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/rp1pi15xul6r"
+                android:textColor="@color/black"
+                android:textSize="24sp"
                 android:layout_height="wrap_content"
-                android:padding="16dp">
+                android:layout_width="169dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="Фото велика (карусель)"
+                />
+        </LinearLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/c_plus_minus_hour"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_marginTop="8dp"
-
-                    android:padding="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageButton
-                        android:id="@+id/minus_button_hour"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:background="@drawable/minus" />
-
-                    <TextView
-                        android:id="@+id/text_hour"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="1 час"
-
-                        android:textColor="@color/white"
-                        android:textSize="18dp"
-                        app:layout_constraintEnd_toStartOf="@+id/plus_button_hour"
-                        app:layout_constraintStart_toEndOf="@+id/minus_button_hour" />
-
-                    <ImageButton
-                        android:id="@+id/plus_button_hour"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/plus"
-
-                        app:layout_constraintEnd_toEndOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
-                    android:id="@+id/money_hour"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="200 р"
-                    android:textSize="@dimen/text_size_on_button"
-                    android:textColor="@color/white"
-
-                    app:layout_constraintTop_toBottomOf="@+id/c_plus_minus_hour"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
 
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_day"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/nameBicycle"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:layout_marginBottom="24dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/blue"
-            android:layout_margin="16dp"
-            app:cardCornerRadius="16dp">
+            android:layout_width="wrap_content"
+            android:text="Модель велосипеда"
+            />
+        <LinearLayout
+            android:id="@+id/logic_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/rfes2zw8rrss"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="73dp"
+                android:orientation="horizontal">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
+                <com.savelyev.MobileApp.CustomObject.CustomButton
+                    android:id="@+id/custom_hour_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <com.savelyev.MobileApp.CustomObject.CustomButton
+                    android:id="@+id/custom_day_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/c_plus_minus_day"
-                    android:layout_width="wrap_content"
+                android:gravity="end"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/addButton"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:padding="16dp"
+                    android:layout_marginEnd="25dp"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:layout_margin="8dp"
-
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <ImageButton
-                        android:id="@+id/minus_button_day"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:background="@drawable/minus"/>
-
-                    <TextView
-                        android:id="@+id/text_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="1 день"
-                        android:textSize="18dp"
-                        android:textColor="@color/white"
-
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintStart_toEndOf="@+id/minus_button_day"
-                        app:layout_constraintEnd_toStartOf="@+id/plus_button_day"/>
-
-                    <ImageButton
-                        android:id="@+id/plus_button_day"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/plus"
-
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-                <TextView
-                    android:id="@+id/money_day"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="800 р"
-                    android:textSize="@dimen/text_size_on_button"
-                    android:textColor="@color/white"
-
-                    app:layout_constraintTop_toBottomOf="@+id/c_plus_minus_day"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </androidx.cardview.widget.CardView>
-
+                    android:background="@drawable/rounded_button_background"
+                    android:text="Добавить" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

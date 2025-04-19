@@ -1,9 +1,7 @@
 package org.example.Controller;
 
-import org.example.DTO.AuthData;
 import org.example.DTO.Response.ErrorResponse;
 import org.example.Model.Bicycle;
-import org.example.Model.User;
 import org.example.Service.BicycleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,16 +23,20 @@ public class BicycleController {
         return ResponseEntity.ok(bicycles);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getBicycle(@PathVariable Long id) {
-        Optional<Bicycle> bicycle = bicycleService.getBicycle(id);
-        if (bicycle.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse("Bicycle with ID '" + id + "' not found"));
+    @GetMapping("/{name}")
+    public ResponseEntity<Object> getBicycleByName(@PathVariable String name) {
+        try {
+            Optional<Bicycle> bicycle = bicycleService.getBicycle(name);
+            if (bicycle.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Bicycle not found"));
+            }
+            return ResponseEntity.ok(bicycle.get());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("An error occurred: " + e.getMessage()));
         }
-        return ResponseEntity.ok(bicycle);
-
     }
+
 
     @PostMapping
     public ResponseEntity<Object> addBicycle(@RequestBody Bicycle bicycleData) {

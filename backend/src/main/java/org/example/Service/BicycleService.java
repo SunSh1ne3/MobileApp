@@ -19,9 +19,20 @@ public class BicycleService {
         return bicycleRepository.findAll();
     }
 
-    public Optional<Bicycle> getBicycle(Long id) {
-        return bicycleRepository.findById(id);
+    public Optional<Bicycle> getBicycle(String name) {
+        try {
+            Optional<Bicycle> bicycle = bicycleRepository.findByName(name);
+            if (bicycle.isEmpty()) {
+                return Optional.empty();
+            }
+            return bicycle;
+        } catch (Exception e) {
+            logger.error("Error during bicycle found: {}", e.getMessage(), e);
+            throw e;
+        }
     }
+
+
     public Bicycle addBicycle(Bicycle bicycleData) {
         try {
             if (bicycleRepository.findByName(bicycleData.getName()).isPresent()) {

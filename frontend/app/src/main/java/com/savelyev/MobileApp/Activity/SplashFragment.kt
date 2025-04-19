@@ -39,7 +39,8 @@ class SplashFragment : Fragment() {
     fun CheckUserRegistred(preferencesManager: PreferencesManager): Boolean {
         //preferencesManager.clearAll()
         Log.i("DebugInfo", preferencesManager.getAllData())
-        return preferencesManager.getBoolean(Companion.APP_PREFERENCES_REGISTERED, false)
+        val userLogin = preferencesManager.getBoolean(Companion.APP_PREFERENCES_REGISTERED, false)
+        return userLogin
     }
     fun CheckJWTToken(): Boolean {
         return true; // TODO: Сделать проверку на актуализацию токена
