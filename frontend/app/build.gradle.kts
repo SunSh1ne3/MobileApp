@@ -33,6 +33,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -42,6 +45,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -58,4 +62,21 @@ dependencies {
     implementation (libs.androidx.lifecycle.livedata.ktx)
     implementation (libs.kotlinx.coroutines.android)
     implementation (libs.converter.scalars)
+    implementation (libs.java.jwt)
+    implementation (libs.kotlinx.datetime)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.jackson.datatype.jsr310)
+
+    implementation(libs.androidx.core.ktx.v190)
+    implementation(libs.androidx.appcompat.v161)
+    implementation(libs.material.v1110)
+    implementation(libs.androidx.constraintlayout.v214)
+
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.picasso)
+    implementation(libs.okhttp)
+    implementation(libs.moshi.kotlin)
+    // Kotlin coroutines
+    implementation(libs.kotlinx.coroutines.android.v164)
+    implementation(libs.converter.jackson)
 }

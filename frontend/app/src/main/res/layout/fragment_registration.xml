@@ -19,15 +19,12 @@
     <TextView
         android:id="@+id/tv_RegistrText"
         android:text="@string/registrationText"
-
         style="@style/MainText"
 
         app:layout_constraintTop_toBottomOf="@+id/tv_HelloText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-
     </TextView>
-
 
     <LinearLayout
         android:id="@+id/ll_FormEdit"

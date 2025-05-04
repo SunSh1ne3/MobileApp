@@ -1,6 +1,7 @@
 package org.example.Model;
 
 import jakarta.persistence.*;
+import org.example.DTO.UserRoleEnum;
 
 @Entity
 @Table(name = "user")
@@ -8,17 +9,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_user")
-    private Long id;
+    private Integer id;
     private String username;
     private String password;
     private String numberPhone;
-    private Long typeOrder;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_role", referencedColumnName = "id_role")
+    private UserRole userRole;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -46,11 +49,11 @@ public class User {
         this.numberPhone = numberPhone;
     }
 
-    public Long getTypeOrder() {
-        return typeOrder;
+    public UserRole getUserRole() {
+        return userRole;
     }
 
-    public void setTypeOrder(Long typeOrder) {
-        this.typeOrder = typeOrder;
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 }

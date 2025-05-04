@@ -14,8 +14,6 @@ import com.savelyev.MobileApp.Utils.PreferencesManager
 import com.savelyev.MobileApp.Utils.PreferencesManager.Companion
 
 class SplashFragment : Fragment() {
-
-
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

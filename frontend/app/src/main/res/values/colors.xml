@@ -5,7 +5,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#008BD6</color>
     <color name="light_blue">#E8F9FC</color>
-    <color name="green">#00FA9A</color>
     <color name="red">#FF6347</color>
     <color name="light_grey">#E5E4E2</color>
+    <color name="grey">#828282</color>
+
+    <color name="toggle_button_text">@color/selector_toggle_text</color>
+    <color name="toggle_button_icon">@color/selector_toggle_icon</color>
+    <color name="toggle_button_background">@color/selector_toggle_background</color>
+    <color name="toggle_button_stroke">@color/selector_toggle_stroke</color>
 </resources>

@@ -26,11 +26,12 @@ class ProfileFragment : Fragment() {
         val deleteAccount_button =  root.findViewById<Button>(R.id.btn_DeleteUserAccount)
 
         outFromAccount_button.setOnClickListener {
+            preferencesManager.saveBoolean(PreferencesManager.APP_PREFERENCES_REGISTERED, false)
             navController.navigate(R.id.splashFragment)
         }
 
         deleteAccount_button.setOnClickListener {
-            preferencesManager.saveBoolean(PreferencesManager.APP_PREFERENCES_REGISTERED, false)
+
             navController.navigate(R.id.splashFragment)
         }
 

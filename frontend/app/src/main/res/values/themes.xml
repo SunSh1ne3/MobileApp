@@ -3,12 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Labs" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.MobileApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="MainText" parent="Base.Theme.Labs">
+    <style name="MainText" parent="Base.Theme.MobileApp">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/base_hello_text_size</item>
@@ -18,15 +18,15 @@
     </style>
 
 
-    <style name="TextField" parent="Base.Theme.Labs">
+    <style name="TextField" parent="Base.Theme.MobileApp">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColorHint">@color/black</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/base_text_size_field</item>
     </style>
 
-    <style name="StyleChoseButton" parent="Base.Theme.Labs">
+    <style name="StyleChoseButton" parent="Base.Theme.MobileApp">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
@@ -36,7 +36,7 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="StyleLinearField" parent="Base.Theme.Labs">
+    <style name="StyleLinearField" parent="Base.Theme.MobileApp">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/base_margin</item>
@@ -45,27 +45,24 @@
         <item name="android:orientation">vertical</item>
         <item name="android:layout_marginTop">12dp</item>
         <item name="android:textSize">16sp</item>
-
     </style>
 
-    <style name="StyleEnterButton" parent="Base.Theme.Labs">
+    <style name="StyleEnterButton" parent="Base.Theme.MobileApp">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_on_button</item>
         <item name="android:backgroundTint">@color/blue</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:layout_marginBottom">@dimen/big_margin</item>
-
     </style>
 
-
-    <style name="PageStyle" parent="Base.Theme.Labs">
+    <style name="PageStyle" parent="Base.Theme.MobileApp">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
     </style>
 
-    <style name="RecycleTextView" parent="Base.Theme.Labs">
+    <style name="RecycleTextView" parent="Base.Theme.MobileApp">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/base_text_size_field</item>
@@ -73,11 +70,70 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="RecycleTitleTextView" parent="Base.Theme.Labs">
+
+    <style name="CharacteristicRowLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <!-- Стиль для TextView с названием характеристики (слева) -->
+    <style name="CharacteristicNameText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/name_product_in_recycle</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">start</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+
     </style>
+
+    <!-- Стиль для TextView со значением характеристики (справа) -->
+    <style name="CharacteristicValueText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">end</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Стиль для разделительной линии -->
+    <style name="CharacteristicDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+    <!-- Стиль для TextView с единицами измерения -->
+    <style name="CharacteristicUnitText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">0</item>
+    </style>
+
+
+    <style name="Style.ToggleButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">8dp</item>
+        <!-- Цвет текста и иконок -->
+        <item name="android:textColor">@color/toggle_button_text</item>
+        <item name="iconTint">@color/toggle_button_icon</item>
+
+        <!-- Цвет фона при выделении -->
+        <item name="backgroundTint">@color/toggle_button_background</item>
+
+        <!-- Цвет обводки -->
+        <item name="strokeColor">@color/toggle_button_stroke</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
 </resources>

@@ -1,6 +1,7 @@
 package org.example.Service;
 
 import org.example.DTO.AuthData;
+import org.example.Model.Bicycle;
 import org.example.Model.User;
 import org.example.Repository.UserRepository;
 import org.slf4j.Logger;
@@ -12,12 +13,15 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class UserService {
     private static final int DEFAULT_LENGTH_USERNAME = 15;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserRoleService userRoleService;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -32,7 +36,7 @@ public class UserService {
             newUser.setNumberPhone(registrationData.getNumberPhone());
             newUser.setPassword(passwordEncoder.encode(registrationData.getPassword()));
             newUser.setUsername(generateNickname());
-            newUser.setTypeOrder(1L);
+            newUser.setUserRole(userRoleService.getUserRole());
 
             return userRepository.save(newUser);
         } catch (Exception e) {
@@ -56,11 +60,25 @@ public class UserService {
                 .orElseThrow(() -> new NoSuchElementException("User with numberPhone: '" + numberPhone + "' not found"));
     }
 
+    public Optional<User> getUser(Integer id_user) {
+        try {
+            return userRepository.findById(id_user);
+        } catch (Exception e) {
+            logger.error("Error during user found: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
-    public void deleteUserById(Long id){
+    public List<User> findUsersWithRoles() {
+        return userRepository.findAllWithUserRoles();
+    }
+
+
+    public void deleteUserById(Integer id){
         if (userRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("Not found user with ID: " + id);
         }

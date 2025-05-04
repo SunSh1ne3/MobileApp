@@ -15,7 +15,6 @@ import com.savelyev.MobileApp.Api.DTO.AuthData
 import com.savelyev.MobileApp.Api.Service.AuthService
 import com.savelyev.MobileApp.R
 import com.savelyev.MobileApp.Utils.PreferencesManager
-import com.savelyev.MobileApp.Utils.PreferencesManager.Companion
 
 class RegistrationFragment : Fragment() {
     private val authService = AuthService()

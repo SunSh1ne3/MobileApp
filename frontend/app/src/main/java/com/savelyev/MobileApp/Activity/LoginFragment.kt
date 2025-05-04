@@ -41,6 +41,7 @@ class LoginFragment : Fragment() {
                     if (success) {
                         preferencesManager.saveString(Companion.JWTTOKEN, response.toString())
                         preferencesManager.saveBoolean(Companion.APP_PREFERENCES_AUTHORIZED,true)
+                        preferencesManager.saveBoolean(PreferencesManager.APP_PREFERENCES_REGISTERED, true)
                         Log.i("DebugInfo", preferencesManager.getAllData())
                         navController.navigate(R.id.listFragment)
                     } else {

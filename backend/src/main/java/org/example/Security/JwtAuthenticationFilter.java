@@ -1,7 +1,5 @@
 package org.example.Security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,9 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
-import java.util.Optional;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
@@ -24,29 +20,66 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
+    public JwtAuthenticationFilter(JwtService jwtService, CustomUserDetailsService userDetailsService) {
+        this.jwtService = jwtService;
+        this.userDetailsService = userDetailsService;
+    }
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("Authorization");
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    )   throws ServletException, IOException {
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7);
-            try {
-                if (jwtService.validateToken(token)) {
-                    String numberPhone = jwtService.extractNumberPhone(token);
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(numberPhone);
+        if (request.getServletPath().startsWith("/api/v1/auth/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-                    //TODO: С правами надо разобраться нормально, вынимать из БД, а лучше из токена
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userPhone;
 
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-            } catch (Exception e) {
-                String errorMessage = Optional.ofNullable(e.getMessage()).orElse("Неизвестная ошибка");
-                logger.error("JWT Token is invalid");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            logger.error("Missing or invalid Authorization header");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authorization header missing or invalid");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
+        try {
+            jwt = authHeader.substring(7);
+            if (!jwtService.validateToken(jwt)) {
+                logger.error("Invalid JWT token");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+                return;
             }
+            logger.info("Received JWT token: {}", jwt);
+            userPhone = jwtService.extractNumberPhone(jwt);
+            logger.info("Extracted username: {}", userPhone);
+            if (userPhone != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userPhone);
+
+                if (jwtService.validateToken(jwt)) {
+                    logger.info("Token validation result: {}", jwtService.validateToken(jwt));
+                    UsernamePasswordAuthenticationToken authentication  =
+                        new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authentication .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication );
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Authentication error", e);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed");
+            return;
         }
 
         filterChain.doFilter(request, response);

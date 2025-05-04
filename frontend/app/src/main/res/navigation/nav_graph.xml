@@ -20,6 +20,14 @@
         android:label="CardElementFragment">
     </fragment>
 
+    <fragment
+        android:id="@+id/orderFragment"
+        android:name="com.savelyev.MobileApp.Activity.OrderFragment"
+        android:label="OrderFragment">
+        <action
+            android:id="@+id/action_orderFragment_to_listFragment"
+            app:destination="@id/listFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileFragment"
@@ -43,7 +51,6 @@
     </fragment>
 
 
-
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.savelyev.MobileApp.Activity.LoginFragment"
@@ -55,6 +62,4 @@
         android:name="com.savelyev.MobileApp.Activity.RegistrationFragment"
         android:label="RegistrationFragment">
     </fragment>
-
-
 </navigation>

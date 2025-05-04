@@ -53,8 +53,10 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
+                android:id="@+id/bicycle_image"
                 android:layout_width="match_parent"
-                android:layout_height="148dp"
+                android:layout_height="150dp"
+                android:contentDescription="bicycle_image"
                 android:src="@drawable/img"
 
                 app:layout_constraintTop_toBottomOf="@+id/toolbar_Element"

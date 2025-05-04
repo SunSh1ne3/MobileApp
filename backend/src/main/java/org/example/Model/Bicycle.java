@@ -2,29 +2,41 @@ package org.example.Model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Table(name="bicycles")
 public class Bicycle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_bicycle")
-    private Long id;
+    private Integer id;
     private String name;
     private Double weight;
     private String frameMaterial;
-    private Long wheelSize;
+    private Integer wheelSize;
 
-    private Long typeBrakes;
-    private Long typeBicycle;
-    private Long age;
+    private Integer typeBrakes;
+    private Integer typeBicycle;
 
-    private Long numberSpeeds;
-    private Long maximumLoad;
+    private Integer age;
+    private Integer numberSpeeds;
+    private Integer maximumLoad;
 
-    public Long getId() {
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(
+            name = "bicycle_bicycle_image",
+            joinColumns = { @JoinColumn(name = "bicycle_id") },
+            inverseJoinColumns = { @JoinColumn(name = "image_id") }
+    )
+    private List<BicycleImage> images;
+
+
+    public Integer getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -49,45 +61,59 @@ public class Bicycle {
         this.frameMaterial = frameMaterial;
     }
 
-    public Long getWheelSize() {
+    public Integer getWheelSize() {
         return wheelSize;
     }
-    public void setWheelSize(Long wheelSize) {
+    public void setWheelSize(Integer wheelSize) {
         this.wheelSize = wheelSize;
     }
 
-    public Long getTypeBrakes() {
+    public Integer getTypeBrakes() {
         return typeBrakes;
     }
-    public void setTypeBrakes(Long typeBrakes) {
+    public void setTypeBrakes(Integer typeBrakes) {
         this.typeBrakes = typeBrakes;
     }
 
-    public Long getTypeBicycle() {
+    public Integer getTypeBicycle() {
         return typeBicycle;
     }
-    public void setTypeBicycle(Long typeBicycle) {
+    public void setTypeBicycle(Integer typeBicycle) {
         this.typeBicycle = typeBicycle;
     }
 
-    public Long getAge() {
+    public Integer getAge() {
         return age;
     }
-    public void setAge(Long age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
-    public Long getNumberSpeeds() {
+    public Integer getNumberSpeeds() {
         return numberSpeeds;
     }
-    public void setNumberSpeeds(Long numberSpeeds) {
+    public void setNumberSpeeds(Integer numberSpeeds) {
         this.numberSpeeds = numberSpeeds;
     }
 
-    public Long getMaximumLoad() {
+    public Integer getMaximumLoad() {
         return maximumLoad;
     }
-    public void setMaximumLoad(Long maximumLoad) {
+    public void setMaximumLoad(Integer maximumLoad) {
         this.maximumLoad = maximumLoad;
     }
+
+    public List<BicycleImage> getImages() {
+        return images;
+    }
+    public void setImages(List<BicycleImage> images) {
+        this.images = images;
+    }
+
+//    public List<Integer> getImages() {
+//        return images;
+//    }
+//    public void setImages(List<Integer> images) {
+//        this.images = images;
+//    }
 }

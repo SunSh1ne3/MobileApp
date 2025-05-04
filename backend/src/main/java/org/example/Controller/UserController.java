@@ -1,6 +1,7 @@
 package org.example.Controller;
 
 import org.example.Model.User;
+import org.example.Service.JwtService;
 import org.example.Service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,12 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/roles")
+    public ResponseEntity<List<User>> getUsersWithRoles() {
+        List<User> users = userService.findUsersWithRoles();
+        return ResponseEntity.ok(users);
+    }
+
     @DeleteMapping
     public ResponseEntity<Void> deleteAllUser() {
         userService.deleteAllUser();
@@ -28,7 +35,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+    public ResponseEntity<String> deleteUser(@PathVariable Integer id){
         try{
             userService.deleteUserById(id);
             return ResponseEntity.ok().build();

@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/listFragment"
-        android:title="@string/Find"
-        android:icon="@drawable/list_icon"/>
+        android:title="@string/FIND_TOOLBAR"
+        android:icon="@drawable/bicycle"/>
     <item
-        android:id="@+id/rentFragment"
-        android:title="@string/Rent"
-        android:icon="@drawable/profile_icon"/>
+        android:id="@+id/orderFragment"
+        android:title="@string/RENT_TOOLBAR"
+        android:icon="@drawable/destination"/>
 
     <item
         android:id="@+id/profileFragment"
-        android:title="@string/Profile"
-        android:icon="@drawable/profile_icon"/>
+        android:title="@string/PROFILE_TOOLBAR"
+        android:icon="@drawable/profile"/>
 
 
 </menu>

@@ -32,16 +32,31 @@ class ListFragment : Fragment() {
 
     private fun fetchBikes() {
         bikesService.getBikeList { bikesList ->
-            if (bikesList != null) {
-                bikeAdapter.setupBikes(bikesList)
-            } else {
-                // Обработка ошибки
-                ShowToast("Не удалось получить список велосипедов.")
+            activity?.runOnUiThread {
+                //progressBar.visibility = View.GONE
+
+                when {
+                    bikesList != null && bikesList.isNotEmpty() -> {
+                        bikeAdapter.setupBikes(bikesList)
+                        //binding.emptyState.visibility = View.GONE
+                    }
+
+                    bikesList != null && bikesList.isEmpty() -> {
+//                        bikeAdapter.submitList(emptyList())
+//                        binding.emptyState.visibility = View.VISIBLE
+//                        binding.emptyState.text = "Список велосипедов пуст"
+                        ShowToast("Список велосипедов пуст")
+                    }
+
+                    else -> {
+                        ShowToast("Не удалось загрузить список велосипедов")
+                    }
+                }
             }
         }
     }
 
-    private fun ShowToast(error: String){
-        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+    private fun ShowToast(message: String){
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

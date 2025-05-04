@@ -2,13 +2,16 @@ package com.savelyev.MobileApp.Utils
 import android.content.Context
 import android.content.SharedPreferences
 
-class PreferencesManager(context: Context) {
-    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("mySettings", Context.MODE_PRIVATE)
+class PreferencesManager(
+    context: Context,
+    prefsName: String = "mySettings"
+) {
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences(prefsName, Context.MODE_PRIVATE)
 
     companion object {
-        const  val APP_PREFERENCES_REGISTERED = "user_registered"
-        const  val APP_PREFERENCES_AUTHORIZED = "user_authorized"
-        const  val JWTTOKEN= "JwtToken"
+        const val APP_PREFERENCES_REGISTERED = "user_registered"
+        const val APP_PREFERENCES_AUTHORIZED = "user_authorized"
+        const val JWTTOKEN= "JwtToken"
     }
 
     fun saveString(key: String, value: String) {
@@ -16,6 +19,9 @@ class PreferencesManager(context: Context) {
     }
     fun getString(key: String, defaultValue: String? = null): String? {
         return sharedPreferences.getString(key, defaultValue)
+    }
+    fun removeString(key: String) {
+        sharedPreferences.edit().remove(key).apply()
     }
 
     fun saveBoolean(key: String, value: Boolean) {
