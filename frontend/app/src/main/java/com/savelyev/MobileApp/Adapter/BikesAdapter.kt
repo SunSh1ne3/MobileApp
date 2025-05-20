@@ -1,7 +1,6 @@
 package com.savelyev.MobileApp.Adapter
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,10 +11,9 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.savelyev.MobileApp.Activity.ListFragment
+import com.savelyev.MobileApp.Fragment.ListFragment
 import com.savelyev.MobileApp.Api.DTO.BikeDTO
 import com.savelyev.MobileApp.R
-import com.squareup.picasso.Picasso
 
 class BikesAdapter(private var context: ListFragment) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -45,6 +43,7 @@ class BikesAdapter(private var context: ListFragment) :
                val navController = it.findNavController()
                val bundle = Bundle().apply {
                    putInt("bicycleID", bike.id)
+                   putString("bikeName", bike.name)
                }
                navController.navigate(R.id.action_listFragment_to_cardElementFragment, bundle)
            }
@@ -79,7 +78,7 @@ class BikesAdapter(private var context: ListFragment) :
 //                        .into(imageView)
 //                }
             } else {
-                imageView.setImageResource(R.drawable.image_with_error)
+                imageView.setImageResource(R.drawable.ic_image_with_error)
             }
         }
     }

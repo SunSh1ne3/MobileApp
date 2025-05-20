@@ -1,34 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/PageStyle">
 
-    <Button
-        android:id="@+id/btn_OutFromAccount"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/OutFromAccount"
-        android:textSize="@dimen/base_hello_text_size"
-        android:backgroundTint="@color/red"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <!-- Шапка профиля -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="@drawable/bg_profile_header"
+            android:elevation="4dp">
 
-    <Button
-        android:id="@+id/btn_DeleteUserAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/DeleteAccount"
-        android:textSize="@dimen/base_hello_text_size"
-        android:backgroundTint="@color/red"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_profile_icon"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@color/white" />
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_OutFromAccount"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/profile_image"
+                android:layout_marginStart="16dp"
+                android:text="Иван Иванов"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_membership_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_user_name"
+                android:layout_toRightOf="@id/profile_image"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:text="Постоянный клиент"
+                android:textColor="@color/grey"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/btn_edit_profile"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_edit"
+                app:tint="@color/white" />
+        </RelativeLayout>
+
+
+        <!-- История заказов -->
+
+        <LinearLayout
+            android:id="@+id/history_order_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_rounded_card"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="История заказов"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Настройки -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Настройки"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_rounded_card"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <com.savelyev.MobileApp.View.SettingItemView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:settingIcon="@drawable/ic_notifications"
+                app:settingTitle="Уведомления"/>
+
+            <com.savelyev.MobileApp.View.SettingItemView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:settingIcon="@drawable/ic_language"
+                app:settingTitle="Язык"/>
+
+            <com.savelyev.MobileApp.View.SettingItemView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:settingIcon="@drawable/ic_security"
+                app:settingTitle="Безопасность"/>
+        </LinearLayout>
+
+        <!-- Опасная зона -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_rounded_card"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/light_grey"
+                android:text="Выйти из аккаунта"
+                android:textColor="#212121" />
+
+            <Button
+                android:id="@+id/btn_delete_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red"
+                android:text="Удалить аккаунт"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -12,6 +12,7 @@ public class User {
     private Integer id;
     private String username;
     private String password;
+    @Column(name = "number_phone", unique = true)
     private String numberPhone;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_role", referencedColumnName = "id_role")
@@ -51,6 +52,10 @@ public class User {
 
     public UserRole getUserRole() {
         return userRole;
+    }
+    @Transient
+    public String getRoleName() {
+        return userRole != null ? userRole.getName() : null;
     }
 
     public void setUserRole(UserRole userRole) {

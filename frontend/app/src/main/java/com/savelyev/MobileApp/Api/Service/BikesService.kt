@@ -85,7 +85,44 @@ class BikesService {
         })
     }
 
-    fun getTypeBicycle(idType: Int?, callback: (TypeBicycleDTO?) -> Unit) {
+    fun getTypesBicycle(callback: (List<TypeBicycleDTO>?) -> Unit) {
+        val call = bikeRepository.getTypesBicycle()
+        call.enqueue(object : Callback<List<TypeBicycleDTO>> {
+            override fun onResponse(call: Call<List<TypeBicycleDTO>>, response: Response<List<TypeBicycleDTO>>) {
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    callback(null) // TODO: Обработка ошибки
+                }
+            }
+
+            override fun onFailure(call: Call<List<TypeBicycleDTO>>, t: Throwable) {
+                Log.e("GetData", "Ошибка: ${t.message}")
+                callback(null)
+            }
+        })
+    }
+
+    fun getTypesBrakesBicycle(callback: (List<TypeBrakesDTO>?) -> Unit) {
+        val call = bikeRepository.getTypesBrakes()
+        call.enqueue(object : Callback<List<TypeBrakesDTO>> {
+            override fun onResponse(call: Call<List<TypeBrakesDTO>>, response: Response<List<TypeBrakesDTO>>) {
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    callback(null) // TODO: Обработка ошибки
+                }
+            }
+
+            override fun onFailure(call: Call<List<TypeBrakesDTO>>, t: Throwable) {
+                Log.e("GetData", "Ошибка: ${t.message}")
+                callback(null)
+            }
+        })
+    }
+
+
+    private fun getTypeBicycle(idType: Int?, callback: (TypeBicycleDTO?) -> Unit) {
         val call = bikeRepository.getTypeBicycleByID(idType)
         call.enqueue(object : Callback<TypeBicycleDTO> {
             override fun onResponse(call: Call<TypeBicycleDTO>, response: Response<TypeBicycleDTO>) {
@@ -103,7 +140,7 @@ class BikesService {
         })
     }
 
-    fun getTypeBrakesBicycle(idBrake: Int?, callback: (TypeBrakesDTO?) -> Unit) {
+    private fun getTypeBrakesBicycle(idBrake: Int?, callback: (TypeBrakesDTO?) -> Unit) {
         val call = bikeRepository.getTypeBrakesBicycleByID(idBrake)
         call.enqueue(object : Callback<TypeBrakesDTO> {
             override fun onResponse(call: Call<TypeBrakesDTO>, response: Response<TypeBrakesDTO>) {

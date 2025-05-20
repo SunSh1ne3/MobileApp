@@ -19,11 +19,19 @@ class BikeRepository {
         return RetrofitClient.apiService.getBicycle(id)
     }
 
-    fun getTypeBicycleByID(id_type: Int?): Call<TypeBicycleDTO> {
-        return RetrofitClient.apiService.getTypeBicycle(id_type)
+    fun getTypeBicycleByID(idType: Int?): Call<TypeBicycleDTO> {
+        return RetrofitClient.apiService.getTypeBicycle(idType)
     }
 
-    fun getTypeBrakesBicycleByID(id_brake: Int?): Call<TypeBrakesDTO> {
-        return RetrofitClient.apiService.getTypeBrakesBicycle(id_brake)
+    fun getTypeBrakesBicycleByID(idBrake: Int?): Call<TypeBrakesDTO> {
+        return RetrofitClient.apiService.getTypeBrakeBicycle(idBrake)
+    }
+
+    fun getTypesBicycle(): Call<List<TypeBicycleDTO>> {
+        return RetrofitClient.apiService.getTypesBicycle()
+    }
+
+    fun getTypesBrakes(): Call<List<TypeBrakesDTO>> {
+        return RetrofitClient.apiService.getTypesBrakesBicycle()
     }
 }

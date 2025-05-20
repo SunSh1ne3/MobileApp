@@ -1,5 +1,6 @@
 package org.example.Repository;
 
+import org.example.DTO.TypeBicycleEnum;
 import org.example.Model.TypeBicycle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

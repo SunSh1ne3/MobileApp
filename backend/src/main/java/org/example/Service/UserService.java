@@ -1,7 +1,7 @@
 package org.example.Service;
 
 import org.example.DTO.AuthData;
-import org.example.Model.Bicycle;
+import org.example.DTO.ErrorResponse.UserNotFoundException;
 import org.example.Model.User;
 import org.example.Repository.UserRepository;
 import org.slf4j.Logger;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -27,17 +26,17 @@ public class UserService {
 
     public User registration(AuthData registrationData)
     {
+        userRepository.findByNumberPhone(registrationData.getNumberPhone()).ifPresent(u -> {
+            logger.error("User already exists with phone: {}, ID: {}", u.getNumberPhone(), u.getId());
+            throw new IllegalArgumentException("Пользователь с номером " + registrationData.getNumberPhone() + " уже зарегистрирован");
+        });
+        User newUser = new User();
+        newUser.setNumberPhone(registrationData.getNumberPhone());
+        newUser.setPassword(passwordEncoder.encode(registrationData.getPassword()));
+        newUser.setUsername(generateNickname());
+        newUser.setUserRole(userRoleService.getUserRole());
+
         try {
-            if (userRepository.findByNumberPhone(registrationData.getNumberPhone()).isPresent()) {
-                throw new IllegalArgumentException("User already registered");
-            }
-
-            User newUser = new User();
-            newUser.setNumberPhone(registrationData.getNumberPhone());
-            newUser.setPassword(passwordEncoder.encode(registrationData.getPassword()));
-            newUser.setUsername(generateNickname());
-            newUser.setUserRole(userRoleService.getUserRole());
-
             return userRepository.save(newUser);
         } catch (Exception e) {
             logger.error("Error during user registration: {}", e.getMessage(), e);
@@ -55,9 +54,14 @@ public class UserService {
         return nickname.toString();
     }
 
+    public User loadUserById(Integer userId){
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with ID: '" + userId + "' not found"));
+    }
+
     public User loadUserByNumberPhone(String numberPhone){
         return userRepository.findByNumberPhone(numberPhone)
-                .orElseThrow(() -> new NoSuchElementException("User with numberPhone: '" + numberPhone + "' not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with numberPhone: '" + numberPhone + "' not found"));
     }
 
     public Optional<User> getUser(Integer id_user) {
@@ -69,7 +73,7 @@ public class UserService {
         }
     }
 
-    public List<User> findAllUsers() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 

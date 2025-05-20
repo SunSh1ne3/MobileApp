@@ -1,17 +1,13 @@
 package org.example.Service;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.example.DTO.Response.ErrorResponse;
 import org.example.DTO.StatusEnum;
 import org.example.Model.Order;
 import org.example.Model.StatusOrder;
-import org.example.Model.User;
 import org.example.Repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -44,6 +40,26 @@ public class OrderService {
         return orderRepository.findByUserId(id_user);
     }
 
+    public List<Order> findActiveOrdersByUserId(Integer userId) {
+        String paidStatus = StatusEnum.PAID.toString();
+        String awaitingPaymentStatus = StatusEnum.AWAITING_PAYMENT.toString();
+        return orderRepository.findByUserIdAndStatusIn(
+                userId,
+                List.of(paidStatus, awaitingPaymentStatus)
+        );
+    }
+
+    public List<Order> findOrdersWithStatus(List<String> status) {
+        return orderRepository.findByStatusIn(status);
+    }
+
+    public List<Order> findOrdersWithStatusByUserId(Integer userId, List<String> status) {
+        return orderRepository.findByUserIdAndStatusIn(
+                userId,
+                status
+        );
+    }
+
     public Order addOrder(Order orderData) {
         try {
             Order newOrder = new Order();
@@ -55,7 +71,7 @@ public class OrderService {
             newOrder.setCountDays(orderData.getCountDays());
 
             newOrder.setEndDate(calculateEndDate(orderData.getStartDate(), newOrder.getCountHours(), newOrder.getCountDays()));
-            newOrder.setStatus(statusOrderService.getStatusByName(StatusEnum.NEW));
+            newOrder.setStatus(StatusEnum.NEW);
             newOrder.setPrice(orderData.getPrice());
 
             return orderRepository.save(newOrder);
@@ -71,7 +87,7 @@ public class OrderService {
                 Order order = orderOptional.orElseThrow(() ->
                     new EntityNotFoundException("Order with ID " + orderId + " not found")
                 );
-                order.setStatus(newStatus.getId());
+                order.setStatus(newStatus.getName());
                 return orderRepository.save(order);
         } catch (Exception e) {
             logger.error("Error during order added: {}", e.getMessage(), e);

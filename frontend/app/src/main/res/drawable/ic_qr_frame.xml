@@ -1,0 +1,43 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="300dp"
+    android:viewportWidth="300"
+    android:viewportHeight="300">
+
+    <!-- Прозрачный центр -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M50,50h200v200h-200z"/>
+
+    <!-- Левый верхний угол -->
+    <path
+        android:strokeColor="@color/white"
+        android:strokeWidth="4"
+        android:pathData="M50,70 L50,50 L70,50"/>
+
+    <!-- Правый верхний угол -->
+    <path
+        android:strokeColor="@color/white"
+        android:strokeWidth="4"
+        android:pathData="M230,50 L250,50 L250,70"/>
+
+    <!-- Правый нижний угол -->
+    <path
+        android:strokeColor="@color/white"
+        android:strokeWidth="4"
+        android:pathData="M250,230 L250,250 L230,250"/>
+
+    <!-- Левый нижний угол -->
+    <path
+        android:strokeColor="@color/white"
+        android:strokeWidth="4"
+        android:pathData="M70,250 L50,250 L50,230"/>
+
+    <path
+        android:name="animated_corner"
+        android:strokeColor="@color/white"
+        android:strokeWidth="4"
+        android:trimPathStart="0"
+        android:trimPathEnd="0"
+        android:pathData="M50,70 L50,50 L70,50"/>
+</vector>

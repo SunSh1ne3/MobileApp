@@ -1,6 +1,7 @@
 package org.example.Model;
 
 import jakarta.persistence.*;
+import org.example.DTO.TypeBrakesEnum;
 
 @Entity
 @Table(name="type_brakes")
@@ -14,8 +15,8 @@ public class TypeBrakes {
 
     public TypeBrakes() {
     }
-    public TypeBrakes(String name) {
-        this.name = name;
+    public TypeBrakes(TypeBrakesEnum name) {
+        this.name = name.getName();
     }
     public Integer getId() {
         return id;

@@ -12,6 +12,7 @@ import org.example.Repository.StatusOrderRepository;
 import org.example.Repository.TypeBicyclesRepository;
 import org.example.Repository.TypeBrakesRepository;
 import org.example.Repository.UserRoleRepository;
+import org.example.Security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -27,44 +28,45 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private UserRoleRepository userRoleRepository;
 
-
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DataInitializer.class);
 
     @Override
     public void run(String... args) throws Exception {
-        runStatus();
-        runTypeBicycle();
-        runTypeBrakes();
-        runUserRole();
+        initializeStatus();
+        initializeTypeBicycle();
+        initializeTypeBrakes();
+        initializeUserRoles();
     }
 
-    public void runStatus(String... args) throws Exception {
+    public void initializeStatus() {
         for (StatusEnum statusEnum : StatusEnum.values()) {
-            if (statusOrderRepository.findByName(statusEnum.getName()) == null) {
-                statusOrderRepository.save(new StatusOrder(statusEnum.getName()));
+            String statusValue  = statusEnum.toString();
+            if (statusOrderRepository.findByName(statusValue ) == null) {
+                statusOrderRepository.save(new StatusOrder(statusValue));
             }
         }
     }
 
-    public void runTypeBicycle(String... args) throws Exception {
+    public void initializeTypeBicycle() {
         for (TypeBicycleEnum typeBicycle : TypeBicycleEnum.values()) {
             if (typeBicyclesRepository.findByName(typeBicycle.getName()) == null) {
-                typeBicyclesRepository.save(new TypeBicycle(typeBicycle.getName()));
+                typeBicyclesRepository.save(new TypeBicycle(typeBicycle));
             }
         }
     }
 
-    public void runTypeBrakes(String... args) throws Exception {
+    public void initializeTypeBrakes() {
         for (TypeBrakesEnum typeBrakes : TypeBrakesEnum.values()) {
             if (typeBrakesRepository.findByName(typeBrakes.getName()) == null) {
-                typeBrakesRepository.save(new TypeBrakes(typeBrakes.getName()));
+                typeBrakesRepository.save(new TypeBrakes(typeBrakes));
             }
         }
     }
 
-    public void runUserRole(String... args) throws Exception {
+    public void initializeUserRoles() {
         for (UserRoleEnum userRole : UserRoleEnum.values()) {
             if (userRoleRepository.findByName(userRole.getName()) == null) {
-                userRoleRepository.save(new UserRole(userRole.getName()));
+                userRoleRepository.save(new UserRole(userRole));
             }
         }
     }

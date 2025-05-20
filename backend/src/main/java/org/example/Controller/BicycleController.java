@@ -57,7 +57,35 @@ public class BicycleController {
         }
     }
 
-    @GetMapping("/parameters/type/{id_type}")
+    @GetMapping("/parameters/types")
+    public ResponseEntity<Object> getTypesBicycle() {
+        try {
+            List<TypeBicycle> typesBicycle= typeBicyclesService.getTypesBicycle();
+            if (typesBicycle.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Types Bicycle not found"));
+            }
+            return ResponseEntity.ok(typesBicycle);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("An error occurred: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/parameters/brakes")
+    public ResponseEntity<Object> getTypesBrakes() {
+        try {
+            List<TypeBrakes> typesBrakesBicycle= typeBrakesService.getTypesBrakes();
+            if (typesBrakesBicycle.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("TypesBrakes Bicycle not found"));
+            }
+            return ResponseEntity.ok(typesBrakesBicycle);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("An error occurred: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/parameters/types/{id_type}")
     public ResponseEntity<Object> getTypeBicycle(@PathVariable Integer id_type) {
         try {
             Optional<TypeBicycle> typeBicycle= typeBicyclesService.getTypeBicycleByID(id_type);

@@ -1,6 +1,7 @@
 package org.example.Controller;
 
 import org.example.DTO.Response.ErrorResponse;
+import org.example.DTO.StatusEnum;
 import org.example.Model.Order;
 import org.example.Model.StatusOrder;
 import org.example.Service.BicycleService;
@@ -23,19 +24,60 @@ public class OrderController {
     private StatusOrderService statusOrderService;
     @Autowired
     private UserService userService;
-
     @Autowired
     private BicycleService bicycleService;
+
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(OrderController.class);
     @GetMapping()
     public ResponseEntity<List<Order>> getAllOrder() {
         List<Order> orders = orderService.findAllOrder();
         return ResponseEntity.ok(orders);
     }
 
+    @GetMapping("/issued")
+    public ResponseEntity<List<Order>> getIssuedOrders() {
+        List<Order> orders = orderService.findOrdersWithStatus(List.of(
+                StatusEnum.ISSUED.toString(), StatusEnum.AWAITING_CONFIRMATION.toString()
+        ));
+        return ResponseEntity.ok(orders);
+    }
+
     @GetMapping("/status/{statusName}")
     public ResponseEntity<StatusOrder> getStatusByName(@PathVariable String statusName) {
-        StatusOrder status = statusOrderService.getStatusByName(statusName);
-        return ResponseEntity.ok(status);
+
+        try {
+            StatusOrder status = statusOrderService.getStatusByName(statusName);
+            return ResponseEntity.ok(status);
+        } catch (IllegalArgumentException e) {
+            logger.error("Invalid status requested: {}", statusName, e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    @GetMapping("/user/{id_user}/active")
+    public ResponseEntity<List<Order>> getActiveUserOrders(@PathVariable Integer id_user) {
+        if (userService.getUser(id_user).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Order> orders = orderService.findActiveOrdersByUserId(id_user);
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/user/{id_user}/issued")
+    public ResponseEntity<List<Order>> getIssuedUserOrders(@PathVariable Integer id_user) {
+        if (userService.getUser(id_user).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Order> orders = orderService.findOrdersWithStatusByUserId(id_user, List.of(StatusEnum.ISSUED.toString()));
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/user/{id_user}/awaitingConfirm")
+    public ResponseEntity<List<Order>> getAwaitingConfirmUserOrders(@PathVariable Integer id_user) {
+        if (userService.getUser(id_user).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Order> orders = orderService.findOrdersWithStatusByUserId(id_user, List.of(StatusEnum.AWAITING_CONFIRMATION.toString()));
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/user/{id_user}/orders")

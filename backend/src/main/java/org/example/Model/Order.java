@@ -3,6 +3,7 @@ package org.example.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import org.example.DTO.StatusEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.OffsetDateTime;
@@ -30,12 +31,12 @@ public class Order {
     private OffsetDateTime endDate;
     @Column(name = "price")
     private Integer price;
-    @Column(name = "countHours")
+    @Column(name = "countHours", nullable = true)
     private Integer countHours;
-    @Column(name = "countDays")
+    @Column(name = "countDays", nullable = true)
     private Integer countDays;
-    @Column(name = "id_status")
-    private Integer id_status;
+    @Column(name = "status")
+    private String status;
 
     public Integer getId() {
         return id;
@@ -74,21 +75,25 @@ public class Order {
         this.price = price;
     }
     public Integer getCountHours() {
-        return countHours;
+        return countHours != null ? countHours : 0;
     }
     public void setCountHours(Integer countHours) {
-        this.countHours = countHours;
+        this.countHours = countHours != null ? countHours : 0;
     }
     public Integer getCountDays() {
-        return countDays;
+        return countDays != null ? countDays : 0;
     }
     public void setCountDays(Integer countDays) {
-        this.countDays = countDays;
+        this.countDays = countDays != null ? countDays : 0;
     }
-    public Integer getStatus() {
-        return id_status;
+    public String getStatus() {
+        return status;
     }
-    public void setStatus(Integer status) {
-        this.id_status = status;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status.name();
     }
 }

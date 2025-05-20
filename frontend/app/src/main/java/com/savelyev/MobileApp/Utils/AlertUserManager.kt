@@ -1,71 +1,77 @@
 package com.savelyev.MobileApp.Utils
 
 import android.content.Context
-import android.content.DialogInterface
-import androidx.appcompat.app.AlertDialog
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.savelyev.MobileApp.Api.DTO.OrderDTO
+import com.savelyev.MobileApp.Api.DTO.QrData
+import com.savelyev.MobileApp.CustomObject.PaymentDialog
+import com.savelyev.MobileApp.R
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class AlertUserManager {
     fun showDeleteConfirmationDialog(
         context: Context,
-        title: String,
-        message: String,
-        positiveButtonText: String = "Да",
-        negativeButtonText: String = "Нет",
+        title: String = context.getString(R.string.CONFIRM_DELETE_TITLE),
+        message: String = context.getString(R.string.CONFIRM_DELETE_MESSAGE),
+        positiveButtonText: String = context.getString(R.string.YES),
+        negativeButtonText: String = context.getString(R.string.NO),
         onDeleteConfirmed: () -> Unit
 
     ) {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle(title)
-        builder.setMessage(message)
+        MaterialAlertDialogBuilder(context, R.style.AlertDialogTheme)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(positiveButtonText) { _, _ -> onDeleteConfirmed() }
+            .setNegativeButton(negativeButtonText, null)
+            .show()
+    }
 
-        builder.setPositiveButton(positiveButtonText) { dialog: DialogInterface, which: Int ->
-            onDeleteConfirmed()
-        }
-
-        builder.setNegativeButton(negativeButtonText) { dialog: DialogInterface, which: Int ->
-            dialog.dismiss()
-        }
-
-        val dialog = builder.create()
-        dialog.show()
+    fun showInformationDialog(
+        context: Context,
+        title: String,
+        message: String,
+        positiveButtonText: String = context.getString(R.string.OK),
+        onConfirmed: (() -> Unit)? = null
+    ) {
+        MaterialAlertDialogBuilder(context, R.style.AlertDialogTheme)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(positiveButtonText) { _, _ -> onConfirmed?.invoke() }
+            .show()
     }
 
     fun showPaymentDialog(
         fragment: Fragment,
         onCardPayment: () -> Unit,
-        onCashPayment: () -> Unit,
-        title: String = "Выберите способ оплаты",
-        messageCash: String = "Оплата наличными",
-        messageCard: String = "Оплата картой",
-        messageCancel: String = "Отмена",
+        onCashPayment: () -> Unit
     ) {
-        MaterialAlertDialogBuilder(fragment.requireContext())
-            .setTitle(title)
-            .setItems(arrayOf(messageCard,messageCash)) { _, which ->
-                when (which) {
-                    0 -> onCardPayment()
-                    1 -> onCashPayment()
-                }
-            }
-            .setNegativeButton(messageCancel, null)
-            .show()
+        PaymentDialog(
+            fragment.requireContext(),
+            onCardPayment,
+            onCashPayment
+        ).apply {
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            show()
+        }
     }
 
-    fun showCashPaymentConfirmation(
+    fun showConfirmationDialog(
         fragment: Fragment,
-        title: String = "Оплата наличными",
-        message: String = "Не забудьте оплатить заказ при получении",
-        messageConfirm: String = "Подтвердить",
-        messageCancel: String = "Отмена",
-        onConfirm: () -> Unit
+        title: String,
+        message: String,
+        positiveButtonText: String = fragment.getString(R.string.CONFIRM),
+        negativeButtonText: String = fragment.getString(R.string.CANCEL),
+        onConfirmed: () -> Unit
     ) {
-        MaterialAlertDialogBuilder(fragment.requireContext())
+        MaterialAlertDialogBuilder(fragment.requireContext(), R.style.AlertDialogTheme)
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton(messageConfirm) { _, _ -> onConfirm() }
-            .setNegativeButton(messageCancel, null)
+            .setPositiveButton(positiveButtonText) { _, _ -> onConfirmed() }
+            .setNegativeButton(negativeButtonText, null)
             .show()
     }
 
@@ -81,5 +87,52 @@ class AlertUserManager {
             .setPositiveButton(messageConfirm) { dialog, _ -> dialog.dismiss() }
             .show()
     }
+
+    fun showCompactQrDialog(
+        fragment: Fragment,
+        orders: List<OrderDTO>,
+        qrSize: Int = 250 // Размер QR-кода в dp
+    ) {
+        try {
+            val userId = UserManager.getCurrentUser()?.id ?: run {
+                PushManager.showToast("Пользователь не авторизован")
+                return
+            }
+            val json = Json {
+                ignoreUnknownKeys = true
+                isLenient = true
+            }
+
+            val qrData = json.encodeToString(QrData(userId, orders.map { it.id }))
+
+            MaterialAlertDialogBuilder(fragment.requireContext(), R.style.QRDialogTheme)
+                .setView(R.layout.dialog_qr)
+                .setCancelable(true)
+                .create()
+                .apply {
+                    window?.setBackgroundDrawableResource(android.R.color.transparent)
+                    setOnShowListener {
+                        try {
+                            findViewById<ImageView>(R.id.qr_image)?.setImageBitmap(
+                                QrCodeGenerator.generate(qrData, qrSize)
+                            )
+                            findViewById<TextView>(R.id.cancel_button)?.setOnClickListener { dismiss() }
+                        } catch (e: Exception) {
+                            dismiss()
+                            PushManager.showToast("Ошибка отображения QR-кода")
+                            e.printStackTrace()
+                        }
+                    }
+                    show()
+                }
+
+
+        } catch (e: Exception) {
+            PushManager.showToast("Ошибка создания QR-кода")
+            e.printStackTrace()
+        }
+    }
+
+
 
 }

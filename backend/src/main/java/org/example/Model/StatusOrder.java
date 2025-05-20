@@ -1,6 +1,7 @@
 package org.example.Model;
 
 import jakarta.persistence.*;
+import org.example.DTO.StatusEnum;
 
 @Entity
 @Table(name="status_order")

@@ -1,9 +1,15 @@
 package com.savelyev.MobileApp.Api.Service
 
+import android.os.Build
 import android.util.Log
-import com.savelyev.MobileApp.Api.DTO.AuthData
+import androidx.annotation.RequiresApi
+import com.savelyev.MobileApp.Api.DTO.Request.AuthData
+import com.savelyev.MobileApp.Api.DTO.ErrorResponse.ErrorResponse
 import com.savelyev.MobileApp.Api.DTO.Response.AuthResponse
+import com.savelyev.MobileApp.Api.DTO.UserDTO
 import com.savelyev.MobileApp.Api.Repository.UserRepository
+import com.savelyev.MobileApp.Utils.TokenManager
+import kotlinx.serialization.json.Json
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -11,73 +17,151 @@ import retrofit2.Response
 import java.io.IOException
 
 class AuthService {
-
     private val userRepository = UserRepository()
+    private lateinit var tokenManager: TokenManager
+    companion object {
+        private const val TAG = "AuthService"
+    }
+    fun initialize(tokenManager: TokenManager) {
+        this.tokenManager = tokenManager
+    }
 
-    fun loginUser(authRequest: AuthData, onResult: (Boolean, String?) -> Unit) {
+    fun loginUser(
+        authRequest: AuthData,
+        onResult: (Boolean, String?) -> Unit) {
+        if (!this::tokenManager.isInitialized) {
+            onResult(false, "AuthService не инициализирован. Вызовите initialize()")
+            return
+        }
+
         val call = userRepository.login(authRequest)
+        Log.d(TAG, "Request created: ${call.request().url}")
         call.enqueue(object : Callback<AuthResponse> {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
-                Log.d("AuthUser", "Response code: ${response.code()}")
-                Log.d("AuthUser", "Response body: ${response.body()}")
-                Log.d("AuthUser", "Error body: ${response.errorBody()?.string()}")
-                if (response.isSuccessful) {
-                    val jwtToken = response.body()?.jwtToken
-                    onResult(true, jwtToken)
-                } else {
-                    val errorBody = response.errorBody()?.string()
-                    Log.e("AuthUser", "Ошибка: ${response.code()} - ${errorBody}")
-
-                    when (response.code()) {
-                        401 -> onResult(false, "Неправильные данные, перепроверьте.")
-                        404 -> onResult(false, "Пользователь не найден.")
-                        else -> onResult(false, "Ошибка авторизации. Попробуйте еще раз.")
+                Log.d(TAG, "Response received. Code: ${response.code()}")
+                try {
+                    if (!response.isSuccessful || response.body() == null) {
+                        val errorBody = response.errorBody()!!.string()
+                        val errorMessage = try {
+                            val errorResponse = Json.decodeFromString<ErrorResponse>(errorBody)
+                            errorResponse.message ?: "Ошибка авторизации"
+                        } catch (e: Exception) {
+                            when (response.code()) {
+                                401 -> "Неверный логин или пароль"
+                                404 -> "Пользователь не найден"
+                                else -> "Ошибка сервера: ${response.code()}"
+                            }
+                        }
+                        Log.e(TAG, errorMessage)
+                        onResult(false, errorMessage)
+                        Log.d(TAG, "Response received. Code: ${response.code()}")
+                        return
                     }
+                    val token = response.body()!!.token
+                    tokenManager.saveToken(token)
+                    Log.d(TAG, "Request true: ${tokenManager.getToken()}")
+                    onResult(true, null)
+                } catch (e: Exception) {
+                    onResult(false, "Неожиданная ошибка: ${e.message}")
                 }
             }
 
+
             override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                Log.e("AuthUser", "Ошибка: ${t.message}")
-                when (t) {
-                    is IOException -> {
-                        Log.e("AuthUser", "Ошибка сети. Проверьте подключение к интернету")
-                        onResult(false, "Ошибка сети. Проверьте подключение к интернету. ${t.message}")
-                    }
-
-                    is HttpException -> {
-                        Log.e("AuthUser", "Ошибка сервера")
-                        onResult(false, "Ошибка сервера. Код: ${t.code()}")
-                    }
-
-                    else -> {
-                        Log.e("AuthUser", "Неизвестная ошибка")
-                        onResult(false, "Неизвестная ошибка: ${t.message}")
-                    }
+                Log.e(TAG, "Request failed", t)
+                val errorMessage = when (t) {
+                    is IOException -> "Ошибка сети: ${t.message}"
+                    is HttpException -> "Ошибка сервера: ${t.code()}"
+                    else -> "Неизвестная ошибка: ${t.message}"
                 }
+                onResult(false, errorMessage)
             }
         })
     }
 
-    fun registerUser( registerRequest: AuthData, onResult: (Boolean, String?) -> Unit) {
-        val call = userRepository.registration(registerRequest)
-        call.enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                if (response.isSuccessful) {
-                    onResult(true, null)
-                } else {
-                    val errorBody = response.errorBody()?.string()
-                    Log.e("RegisterUser", "Ошибка: ${response.code()} - ${errorBody}")
+//    fun refreshToken(onResult: (Boolean, AuthResponse?) -> Unit) {
+//        val refreshToken = TokenManager.getInstance().getToken() ?: run {
+//            onResult(false, null)
+//            return
+//        }
+//
+//        refreshToken("Bearer $refreshToken", onResult)
+//    }
+//
+//    private fun refreshToken(refreshToken: String, onResult: (Boolean, AuthResponse?) -> Unit) {
+//        val call = userRepository.refreshToken("Bearer $refreshToken")
+//        call.enqueue(object : Callback<AuthResponse> {
+//            @RequiresApi(Build.VERSION_CODES.O)
+//            override fun onResponse(
+//                call: Call<AuthResponse>,
+//                response: Response<AuthResponse>
+//            ) {
+//                if (response.isSuccessful) {
+//                    val tokenResponse = response.body()
+//                    if (tokenResponse != null) {
+//                        val accessExp = JwtParser1.getExpiration(tokenResponse.accessToken)
+//                        val refreshExp = tokenResponse.refreshToken?.let { JwtParser1.getExpiration(it) } ?: 0L
+//
+//                        // Сохраняем новые токены
+//                        TokenManager.getInstance().saveTokens(
+//                            tokenResponse.accessToken,
+//                            tokenResponse.refreshToken ?: "",
+//                            accessExp,
+//                            refreshExp
+//                        )
+//                        onResult(true, tokenResponse)
+//                    } else {
+//                        onResult(false, null)
+//                    }
+//                } else {
+//                    when (response.code()) {
+//                        401 -> TokenManager.getInstance().clearToken()
+//                    }
+//                    onResult(false, null)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+//                Log.e(TAG, "Refresh token failed", t)
+//                onResult(false, null)
+//            }
+//        })
+//    }
 
-                    when (response.code()) {
-                        409 -> onResult(false, "Пользователь с таким номером телефона уже существует.")
-                        else -> onResult(false, "Ошибка регистрации. Попробуйте еще раз.")
+    fun registerUser(
+        registerRequest: AuthData,
+        onResult: (Boolean, String?, UserDTO?) -> Unit) {
+        val call = userRepository.registration(registerRequest)
+        call.enqueue(object : Callback<UserDTO> {
+            override fun onResponse(call: Call<UserDTO>, response: Response<UserDTO>) {
+                if (response.isSuccessful) {
+                    val userDTO = response.body()
+                    if (userDTO != null) {
+                        onResult(true, null, userDTO)
+                    } else {
+                        Log.e(TAG, "Registration successful but response body is null")
+                        onResult(false, null, null)
                     }
+
+                } else {
+                    val errorMessage = when (response.code()) {
+                        409 -> "Пользователь с таким номером телефона уже существует."
+                        else -> "Ошибка регистрации. Попробуйте еще раз."
+                    }
+                    Log.e(TAG, errorMessage)
+                    onResult(false, errorMessage, null)
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.e("RegisterUser", "Ошибка: ${t.message}")
-                onResult(false, "Ошибка сети. Проверьте подключение к интернету.")
+            override fun onFailure(call: Call<UserDTO>, t: Throwable) {
+                val errorMessage = when (t) {
+                    is IOException -> "Ошибка сети: ${t.message}"
+                    is HttpException -> "Ошибка сервера: ${t.code()}"
+                    else -> "Неизвестная ошибка: ${t.message}"
+                }
+                Log.e(TAG, "Registration failed", t)
+                onResult(false, errorMessage, null)
             }
         })
     }

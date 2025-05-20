@@ -1,24 +1,30 @@
 package com.savelyev.MobileApp.Utils
 
 import android.content.Context
+import android.util.Log
 
 class TokenManager(context: Context) {
-    private var tokenPreferences = PreferencesManager(context)
+    private var tokenPreferences: PreferencesManager = PreferencesManager(context)
+    private val tag = "TokenManager"
+
 
     fun saveToken(token: String) {
-        tokenPreferences.saveString(PreferencesManager.JWTTOKEN, token).also {
-            android.util.Log.d("TokenManager", "Token saved: ${token.take(5)}...")
+        tokenPreferences.saveString(PreferencesManager.JWT_TOKEN, token).also {
+            Log.d(tag, "Token saved: ${token.take(5)}...")
         }
     }
-    fun getToken() :String?{
-        val token =  tokenPreferences.getString(PreferencesManager.JWTTOKEN)
-        return token?.takeIf { it.isNotBlank() }
+
+    fun getData() {
+        Log.d(tag, "AllData: ${ tokenPreferences.getAllData()}...")
+    }
+
+    fun getToken(): String? {
+        return tokenPreferences.getString(PreferencesManager.JWT_TOKEN)
     }
 
     fun clearToken() {
-        tokenPreferences.removeString(PreferencesManager.JWTTOKEN).also {
-            android.util.Log.d("TokenManager", "Token cleared")
-        }
+        tokenPreferences.removeObject(PreferencesManager.JWT_TOKEN)
+        Log.d(tag, "Token cleared")
     }
 
     companion object {

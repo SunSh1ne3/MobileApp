@@ -23,7 +23,7 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:contentDescription="minus_button"
-            android:src="@drawable/minus"
+            android:src="@drawable/ic_minus"
             android:scaleType="fitXY"/>
 
         <TextView
@@ -41,7 +41,7 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:contentDescription="plus_button"
-            android:src="@drawable/plus"
+            android:src="@drawable/ic_plus"
             android:scaleType="fitCenter"/>
     </LinearLayout>
 

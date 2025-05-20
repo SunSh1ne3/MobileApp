@@ -1,9 +1,7 @@
 package org.example.Service;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.example.Model.User;
@@ -17,11 +15,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class TokenService {
     private final String SECRET_KEY;
-    private static final long EXPIRATION_TIME = 86400000;
+    private static final long TOKEN_EXPIRATION  = 86400000; // 24 часа
 
-    public JwtService(){
+    public TokenService(){
         Dotenv dotenv = Dotenv.load();
         SECRET_KEY = dotenv.get("JWT_SECRET");
 
@@ -33,34 +31,52 @@ public class JwtService {
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
-        claims.put("role", user.getUserRole()); // Добавляем роль пользователя
+        claims.put("role", user.getUserRole());
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getNumberPhone())
                 .setIssuedAt(Date.from(Instant.now()))
-                .setExpiration(Date.from(Instant.now().plusMillis(EXPIRATION_TIME)))
+                .setExpiration(Date.from(Instant.now().plusMillis(TOKEN_EXPIRATION)))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public String extractNumberPhone(String token){
-        return (String) extractAllClaims(token).getSubject();
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    public boolean isTokenValid(String token) {
+        try {
+            return !isTokenExpired(token);
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public String getTokenValidationError(String token) {
+        try {
+            if (isTokenExpired(token)) {
+                return "Token expired";
+            }
+            return "Token is valid";
+        } catch (ExpiredJwtException e) {
+            return "Token expired";
+        } catch (UnsupportedJwtException e) {
+            return "Unsupported token format";
+        } catch (MalformedJwtException e) {
+            return "Malformed token";
+        } catch (SignatureException e) {
+            return "Invalid token signature";
+        } catch (IllegalArgumentException e) {
+            return "Token is empty or null";
+        }
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-
-    public boolean isTokenValid(String token) {
-        try {
-            return !isTokenExpired(token);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
@@ -69,13 +85,9 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public boolean validateToken(String token){
-        return (extractAllClaims(token) != null) && !isTokenExpired(token);
-    }
-
     public Claims extractAllClaims(String token){
         return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSignInKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

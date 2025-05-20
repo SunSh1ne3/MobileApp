@@ -2,31 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     style="@style/PageStyle">
-
-    <TextView
-        android:id="@+id/tv_HelloText"
-        android:text="@string/helloText"
-
-        style="@style/MainText"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-    </TextView>
-
-    <TextView
-        android:id="@+id/tv_InfoHelloText"
-        android:text="@string/info_start"
-
-        style="@style/MainText"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_HelloText">
-
-    </TextView>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -34,10 +10,11 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:indeterminateTint="@color/black"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_InfoHelloText">
+        app:layout_constraintTop_toTopOf="parent">
     </ProgressBar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

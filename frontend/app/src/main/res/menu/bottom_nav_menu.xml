@@ -4,16 +4,16 @@
     <item
         android:id="@+id/listFragment"
         android:title="@string/FIND_TOOLBAR"
-        android:icon="@drawable/bicycle"/>
+        android:icon="@drawable/ic_bicycle"/>
     <item
         android:id="@+id/orderFragment"
         android:title="@string/RENT_TOOLBAR"
-        android:icon="@drawable/destination"/>
+        android:icon="@drawable/ic_destination"/>
 
     <item
         android:id="@+id/profileFragment"
         android:title="@string/PROFILE_TOOLBAR"
-        android:icon="@drawable/profile"/>
+        android:icon="@drawable/ic_profile"/>
 
 
 </menu>

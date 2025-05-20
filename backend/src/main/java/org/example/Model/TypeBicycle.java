@@ -1,6 +1,7 @@
 package org.example.Model;
 
 import jakarta.persistence.*;
+import org.example.DTO.TypeBicycleEnum;
 
 @Entity
 @Table(name="type_bicycle")
@@ -14,8 +15,8 @@ public class TypeBicycle {
 
     public TypeBicycle() {
     }
-    public TypeBicycle(String name) {
-        this.name = name;
+    public TypeBicycle(TypeBicycleEnum name) {
+        this.name = name.getName();
     }
 
 

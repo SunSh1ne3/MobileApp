@@ -31,20 +31,12 @@ public class StatusOrderService {
         }
     }
 
-    public Integer getStatusByName(StatusEnum name) {
+    public Integer getIDStatusByName(StatusEnum name) {
         StatusOrder Status = statusOrderRepository.findByName(name.getName());
         if (Status != null) {
             return Status.getId();
         } else {
             throw new RuntimeException("Status not found");
-        }
-    }
-    public Integer getActiveStatus() {
-        StatusOrder activeStatus = statusOrderRepository.findByName(StatusEnum.ACTIVE.getName());
-        if (activeStatus != null) {
-            return activeStatus.getId();
-        } else {
-            throw new RuntimeException("Active status not found");
         }
     }
 }

@@ -8,28 +8,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.savelyev.MobileApp.Activity.OrderFragment
+import com.google.android.material.button.MaterialButton
+import com.savelyev.MobileApp.Fragment.OrderHistoryFragment
+import com.savelyev.MobileApp.Api.DTO.Enum.StatusEnum
 import com.savelyev.MobileApp.Api.DTO.OrderDTO
 import com.savelyev.MobileApp.Api.Service.BikesService
 import com.savelyev.MobileApp.Api.Service.OrderService
-import com.savelyev.MobileApp.Api.Service.OrderStatusService
+import com.savelyev.MobileApp.Fragment.OrderFragment
 import com.savelyev.MobileApp.R
 import com.savelyev.MobileApp.Utils.AlertUserManager
+import com.savelyev.MobileApp.Utils.PushManager
 import com.savelyev.MobileApp.Utils.TimeManager
+import com.savelyev.MobileApp.Utils.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class OrdersAdapter(
-    private val context: OrderFragment,
-    private val bindingInterface: OrderBindingInterface) :
+    private val fragment: Fragment,
+    private val bindingInterface: OrderBindingInterface? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         private const val TAG = "OrdersAdapter"
@@ -37,7 +41,7 @@ class OrdersAdapter(
 
     private var mOrdersList: ArrayList<OrderDTO> = ArrayList()
     private var filteredOrders = mutableListOf<OrderDTO>()
-    private var currentFilter: String? = null
+    private var allowedStatuses: Set<String>? = null
     private var totalPriceOrder: Int = 0
 
     interface OrderBindingInterface {
@@ -46,20 +50,87 @@ class OrdersAdapter(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val itemView = layoutInflater.inflate(R.layout.order_card, parent, false)
         return OrdersViewHolder(itemView, BikesService())
     }
 
+    @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int
+    ) {
         if (holder is OrdersViewHolder) {
             val order = filteredOrders[position]
             holder.bind(mOrder = order)
-            holder.itemView.findViewById<ImageButton>(R.id.deleteOrderButton).setOnClickListener {
+            val confirmReturnButton = holder.itemView.findViewById<MaterialButton>(R.id.confirmReturnButton)
+            val deleteOrderButton = holder.itemView.findViewById<ImageButton>(R.id.deleteOrderButton)
+            val cardStatusLinear = holder.itemView.findViewById<LinearLayout>(R.id.card_status)
+            val statusOrderText = holder.itemView.findViewById<TextView>(R.id.status_order_text)
+
+            holder.itemView.setOnClickListener {
+                if (fragment is OrderFragment && UserManager.isAdminOrManager()) {
+                    fragment.showOrderDetails(order)
+                }
+            }
+            val statusColor = when (order.status) {
+//                "NEW" -> R.color.light_blue
+//                "ISSUED" -> R.color.light_blue
+//                "AWAITING_PAYMENT" -> R.color.light_blue
+//                "PAID" -> R.color.light_blue
+//                "AWAITING_CONFIRMATION" -> R.color.light_blue
+                "COMPLETED" -> R.color.light_grey
+                "CANCELLED" -> R.color.light_grey
+                else -> R.color.light_blue
+            }
+
+            cardStatusLinear.apply{
+                visibility = if (
+                    fragment is OrderHistoryFragment
+                ) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+                setBackgroundColor(ContextCompat.getColor(fragment.requireContext(), statusColor))
+            }
+
+            statusOrderText.apply {
+               text = StatusEnum.fromStatus(order.status)
+            }
+
+            confirmReturnButton.apply {
+                visibility = if (
+                    UserManager.isAdminOrManager() &&
+                    order.status == StatusEnum.AWAITING_CONFIRMATION.name
+                ) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+            }
+            confirmReturnButton.setOnClickListener {
+                confirmOrder(order.id)
+            }
+
+            deleteOrderButton.apply {
+                visibility = if (
+                    UserManager.isAdminOrManager() ||
+                    fragment is OrderHistoryFragment
+                ){
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
+            }
+            deleteOrderButton.setOnClickListener {
                 AlertUserManager().showDeleteConfirmationDialog(
-                    context.requireContext(),
+                    fragment.requireContext(),
                     "Отмена заказа",
                     "Точно хотите отменить аренду велосипеда?"
                 ) {
@@ -72,8 +143,6 @@ class OrdersAdapter(
     override fun getItemCount(): Int = filteredOrders.size
     fun getCurrentOrders(): List<OrderDTO> = filteredOrders.toList()
 
-
-
     fun setupOrders(ordersList: List<OrderDTO>?, callback: (() -> Unit)? = null) {
         mOrdersList.clear()
         ordersList?.let { mOrdersList.addAll(it)}
@@ -81,36 +150,59 @@ class OrdersAdapter(
         callback?.invoke()
     }
 
-
-    private fun checkEmptyState() {
-        bindingInterface.showEmptyState(filteredOrders.isEmpty())
+    fun clearLists() {
+        if (mOrdersList.isEmpty()) mOrdersList.clear()
+        if (filteredOrders.isEmpty()) filteredOrders.clear()
+        setupOrders(null)
     }
 
-    fun updateOrderStatus(newStatus: String, callback: (successCount: Int) -> Unit = { _ -> }) {
-        OrderStatusService().getStatus(newStatus) { statusDTO ->
-            if (statusDTO == null) {
-                callback(0)
-                return@getStatus
-            }
+    private fun checkEmptyState() {
+        val isEmpty = filteredOrders.isEmpty()
+        Log.d("ORDER_DEBUG", "Empty state: $isEmpty")
+        bindingInterface?.showEmptyState(isEmpty)
+    }
 
-            var successCount = 0
+    fun updateOrderStatus(status: StatusEnum, callback: (successCount: Int) -> Unit = { _ -> }) {
+        var successCount = 0
+        val newStatus = status.name
+        filteredOrders.forEach { order ->
+            OrderService().updateOrderStatus(order.id, newStatus) { updatedOrder ->
+                updatedOrder?.let {
+                    activity?.runOnUiThread {
+                        updateFilteredOrders(it)
+                        if (it.status == status.name) successCount++
 
-            filteredOrders.forEach { order ->
-                OrderService().updateOrderStatus(order.id, statusDTO.name) { updatedOrder ->
-                    updatedOrder?.let {
-                        activity?.runOnUiThread {
-                            updateFilteredOrders(it)
-                            if (it.status == statusDTO.id) {
-                                successCount++
-                            }
-
-                            // Если это последнее обновление
-                            if (successCount == filteredOrders.size) {
-                                applyFilter() // Переприменяем фильтр
-                                callback(successCount)
-                            }
+                        if (successCount == filteredOrders.size) {
+                            applyFilter()
+                            callback(successCount)
                         }
                     }
+                } ?: run {
+                    activity?.runOnUiThread {
+                        callback(0)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun confirmOrder(orderId: Int) {
+        OrderService().updateOrderStatus(orderId, StatusEnum.COMPLETED.name) { updatedOrder ->
+            activity?.runOnUiThread {
+                updatedOrder?.let {
+                    // Обновляем данные в списках
+                    val mainListIndex = mOrdersList.indexOfFirst { it.id == orderId }
+                    if (mainListIndex != -1) mOrdersList[mainListIndex] = updatedOrder
+
+                    val filteredIndex = filteredOrders.indexOfFirst { it.id == orderId }
+                    if (filteredIndex != -1) {
+                        filteredOrders[filteredIndex] = updatedOrder
+                        notifyItemChanged(filteredIndex)
+                    }
+                    applyFilter()
+                    PushManager.showToast("Статус аренды обновлен")
+                } ?: run {
+                    PushManager.showToast("Ошибка обновления статуса")
                 }
             }
         }
@@ -131,35 +223,26 @@ class OrdersAdapter(
         }
     }
 
-    fun filterByStatus(status: String?) {
-        currentFilter = status
+    fun filterByStatuses(statuses: Set<StatusEnum>? = null) {
+        allowedStatuses = statuses?.map { it.name }?.toSet()
         applyFilter()
     }
 
+    fun filterByStatus(status: StatusEnum?) {
+        filterByStatuses(status?.let { setOf(it) })
+    }
 
     private fun applyFilter() {
-        if (currentFilter.isNullOrEmpty()) {
-            filteredOrders = mOrdersList.toMutableList()
-            updateAfterFilter()
-            return
+        Log.d("ORDER_DEBUG", "Applying filter: $allowedStatuses")
+        filteredOrders = if (allowedStatuses == null) {
+            mOrdersList.toMutableList()
+        } else {
+            mOrdersList.filter { order ->
+                allowedStatuses!!.contains(order.status)
+            }.toMutableList()
         }
-
-        if (mOrdersList.isEmpty()) {
-            filteredOrders.clear()
-            updateAfterFilter()
-            return
-        }
-
-        OrderStatusService().getStatus(currentFilter!!) { status ->
-            activity?.runOnUiThread {
-                filteredOrders = if (status != null) {
-                    mOrdersList.filter { it.status == status.id }.toMutableList()
-                } else {
-                    mOrdersList.toMutableList()
-                }
-                updateAfterFilter()
-            }
-        }
+        Log.d("ORDER_DEBUG", "Filter result: ${filteredOrders.size} items")
+        updateAfterFilter()
     }
 
     private fun updateAfterFilter() {
@@ -191,8 +274,8 @@ class OrdersAdapter(
 
     @SuppressLint("SetTextI18n")
     private fun updateTotalPrice() {
-        bindingInterface.updateTotalPrice(totalPriceOrder)
-        bindingInterface.showEmptyState(filteredOrders.isEmpty())
+        bindingInterface?.updateTotalPrice(totalPriceOrder)
+        bindingInterface?.showEmptyState(filteredOrders.isEmpty())
     }
 
     private fun removeItem(position: Int) {
@@ -205,7 +288,7 @@ class OrdersAdapter(
             notifyItemRangeChanged(position, filteredOrders.size)
 
             totalPriceOrder = filteredOrders.sumOf { it.price }
-            bindingInterface.updateTotalPrice(totalPriceOrder)
+            bindingInterface?.updateTotalPrice(totalPriceOrder)
             checkEmptyState()
         }
     }

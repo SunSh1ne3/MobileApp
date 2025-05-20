@@ -1,4 +1,4 @@
-package com.savelyev.MobileApp.Activity
+package com.savelyev.MobileApp.Fragment
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -24,13 +23,15 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.savelyev.MobileApp.Adapter.ImageBicycleAdapter
 import com.savelyev.MobileApp.Api.DTO.BikeDTO
+import com.savelyev.MobileApp.Api.DTO.Enum.StatusEnum
 import com.savelyev.MobileApp.Api.DTO.OrderDTO
 import com.savelyev.MobileApp.Api.Service.BikesService
 import com.savelyev.MobileApp.Api.Service.OrderService
-import com.savelyev.MobileApp.Api.Service.UserService
 import com.savelyev.MobileApp.CustomObject.CustomButton
 import com.savelyev.MobileApp.R
+import com.savelyev.MobileApp.Utils.PushManager
 import com.savelyev.MobileApp.Utils.TimeManager
+import com.savelyev.MobileApp.Utils.UserManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -50,6 +51,7 @@ class CardElementFragment : Fragment() {
     private lateinit var customHourButton: CustomButton
     private lateinit var customDayButton: CustomButton
     private lateinit var totalPriceText: TextView
+    private lateinit var addButton: Button
 
     private lateinit var timeManager: TimeManager
 
@@ -57,6 +59,7 @@ class CardElementFragment : Fragment() {
     private var selectedDateTime: OffsetDateTime? = null
     private var totalPrice: Int? = 0
     private var savedInstanceState: Bundle? = null
+    private var bicycleID: Int = 0
 
     companion object {
         private const val ARG_SELECTED_DATE = "selected_date"
@@ -70,10 +73,9 @@ class CardElementFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_card_element, container, false)
-        val bicycleID = requireArguments().getInt("bicycleID")
 
-        timeManager = TimeManager()
-
+        initComponents(root)
+        setupListeners()
         fetchBikeData(bicycleID, root)
         if (savedInstanceState == null) {
             selectedDateTime = arguments?.getLong(ARG_SELECTED_DATE)?.let {
@@ -81,31 +83,7 @@ class CardElementFragment : Fragment() {
             }
         }
         this.savedInstanceState = savedInstanceState
-        // Инициализация элементов
-        customHourButton = root.findViewById(R.id.custom_hour_button)
-        customDayButton = root.findViewById(R.id.custom_day_button)
-        toggleGroup = root.findViewById(R.id.toggleGroup)
-        selectedDateTextView = root.findViewById(R.id.selectedDateTextView)
-        selectedDateContainer = root.findViewById(R.id.selectedDateContainer)
-        totalPriceText = root.findViewById(R.id.price)
-        val addButton = root.findViewById<Button>(R.id.addButton)
 
-
-
-        addButton.setOnClickListener {
-            val userId = UserService(requireContext()).extractUserIdFromToken()
-            val startDate: OffsetDateTime = selectedDateTime ?: timeManager.getZoneTime()
-
-            val orderData = OrderDTO(
-                userId = userId,
-                bicycleId = bicycleID,
-                startDate = startDate,
-                price = customHourButton.getPrice() + customDayButton.getPrice(),
-                countDays = customDayButton.getCurrentCount(),
-                countHours = customHourButton.getCurrentCount(),
-            )
-            addOrder(orderData)
-        }
         return root
     }
 
@@ -121,14 +99,53 @@ class CardElementFragment : Fragment() {
         calculateTotal()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initComponents(root: View) {
+        bicycleID = requireArguments().getInt("bicycleID")
+        timeManager = TimeManager()
+        customHourButton = root.findViewById(R.id.custom_hour_button)
+        customDayButton = root.findViewById(R.id.custom_day_button)
+        toggleGroup = root.findViewById(R.id.toggleGroup)
+        selectedDateTextView = root.findViewById(R.id.selectedDateTextView)
+        selectedDateContainer = root.findViewById(R.id.selectedDateContainer)
+        totalPriceText = root.findViewById(R.id.price)
+        addButton = root.findViewById(R.id.addButton)
+    }
+
+    private fun setupListeners() {
+        addButton.setOnClickListener {
+            val userId = UserManager.getCurrentUser()?.id
+            Log.d("OrderCard", "CurrentUser: ${UserManager.getCurrentUser()}")
+            val startDate: OffsetDateTime = selectedDateTime ?: timeManager.getZoneTime()
+
+            val orderData = userId?.let { it1 ->
+                OrderDTO(
+                    userId = it1,
+                    bicycleId = bicycleID,
+                    startDate = startDate,
+                    status = StatusEnum.NEW.name,
+                    price = customHourButton.getPrice() + customDayButton.getPrice(),
+                    countDays = customDayButton.getCurrentCount(),
+                    countHours = customHourButton.getCurrentCount(),
+                )
+            }
+            if (orderData != null) {
+                addOrder(orderData)
+            }
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setupToggleGroup() {
         var isInitialSetup = true
 
         // Восстанавливаем состояние
-        val savedMode = savedInstanceState?.getInt("SELECTED_MODE") ?: arguments?.getInt(ARG_SELECTED_MODE, R.id.btnNow)
-        val savedDate = savedInstanceState?.getLong("SELECTED_DATE") ?: arguments?.getLong(ARG_SELECTED_DATE)
+        val savedMode = savedInstanceState?.getInt("SELECTED_MODE") ?: arguments?.getInt(
+            ARG_SELECTED_MODE, R.id.btnNow)
+        val savedDate = savedInstanceState?.getLong("SELECTED_DATE") ?: arguments?.getLong(
+            ARG_SELECTED_DATE
+        )
 
         toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (!isUserInteraction || !isChecked || isInitialSetup) return@addOnButtonCheckedListener
@@ -188,9 +205,11 @@ class CardElementFragment : Fragment() {
 
         DatePickerDialog(
             requireContext(),
+            R.style.CustomDatePicker,
             { _, year, month, day ->
                 TimePickerDialog(
                     requireContext(),
+                    R.style.CustomTimePicker,
                     { _, hour, minute ->
                         selectedDateTime = OffsetDateTime.of(
                             year, month + 1, day, hour, minute, 0, 0,
@@ -278,13 +297,12 @@ class CardElementFragment : Fragment() {
         totalPriceText.text = "$totalPrice р"
     }
 
-
     private fun addOrder(orderData: OrderDTO) {
         orderService.addOrder(orderData) { response ->
             if (response != null) {
-                ShowToast("Заказ успешно добавлен.") //TODO: добавить попап с переходом в заказы или продолжить покупки
+                PushManager.showToast("Заказ успешно добавлен.") //TODO: добавить попап с переходом в заказы или продолжить покупки
             } else {
-                ShowToast("Не удалось добавить ваш заказ, попробуйте еще раз.")
+                PushManager.showToast("Не удалось добавить ваш заказ, попробуйте еще раз.")
             }
         }
     }
@@ -297,7 +315,7 @@ class CardElementFragment : Fragment() {
                 //TODO: все работает, но надо подключать нормально через S3
                 //loadImage(bikeData,root)
             } else {
-                ShowToast("Ошибка загрузки данных, повторите попытку.")
+                PushManager.showToast("Ошибка загрузки данных, повторите попытку.")
             }
         }
     }
@@ -416,10 +434,6 @@ class CardElementFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun ShowToast(message: String){
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun <T> setValueAndShow(

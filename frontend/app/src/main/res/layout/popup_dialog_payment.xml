@@ -1,28 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_gravity="center"
-    android:padding="16dp">
+    android:background="@drawable/dialog_rounded_bg"
+    android:elevation="8dp"
+    android:clipToOutline="true">
 
-    <Button
-        android:id="@+id/btnCardPayment"
+    <!-- Заголовок с закругленными верхними углами -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Оплата картой"/>
+        app:cardCornerRadius="8dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardBackgroundColor="@color/blue"
+        app:contentPadding="0dp">
 
-    <Button
-        android:id="@+id/btnCashPayment"
+        <TextView
+            android:id="@+id/titleDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/PAYMENT_TITLE"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="16dp"/>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Основной контент с закругленными нижними углами -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Оплата наличными"/>
+        android:layout_marginTop="-8dp"
+        app:cardCornerRadius="8dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardBackgroundColor="@color/white"
+        app:strokeColor="@color/light_grey"
+        app:strokeWidth="1dp"
+        app:contentPadding="0dp">
 
-    <Button
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp">
+
+            <!-- Оплата картой -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCardPayment"
+                style="@style/PaymentOptionButton"
+                android:text="@string/CARD_PAYMENT_TITLE"
+                android:textColor="@color/grey"
+                android:enabled="false"
+                app:icon="@drawable/ic_credit_card"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:backgroundTint="@color/grey"
+                app:strokeColor="@color/grey"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/COMING_SOON_TITLE"
+                android:textColor="@color/grey"
+                android:textSize="12sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="-8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Разделитель -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_grey"
+                android:layout_marginHorizontal="16dp"/>
+
+            <!-- Оплата наличными -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCashPayment"
+                style="@style/PaymentOptionButton"
+                android:text="@string/CASH_PAYMENT_TITLE"
+                app:icon="@drawable/ic_cash"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Кнопка отмены -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancel"
-        android:layout_width="match_parent"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Отмена"/>
+        android:text="@string/CANCEL"
+        android:layout_gravity="center"
+        android:layout_marginVertical="8dp"
+        android:textColor="@color/blue"/>
+
 </LinearLayout>

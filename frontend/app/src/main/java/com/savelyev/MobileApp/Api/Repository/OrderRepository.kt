@@ -10,6 +10,23 @@ class OrderRepository {
         return RetrofitClient.apiService.getUserOrders(userId)
     }
 
+    fun getActiveUserOrderList(userId: Int): Call<List<OrderDTO>> {
+        return RetrofitClient.apiService.getActiveOrder(userId)
+    }
+
+    fun getIssueUserOrderList(userId: Int): Call<List<OrderDTO>> {
+        return RetrofitClient.apiService.getIssuedUserOrder(userId)
+    }
+
+    fun getAwaitingConfirmUserOrderList(userId: Int): Call<List<OrderDTO>> {
+        return RetrofitClient.apiService.getAwaitingConfirmUserOrder(userId)
+    }
+
+    fun getIssuedOrderList(): Call<List<OrderDTO>> {
+        return RetrofitClient.apiService.getIssuedOrder()
+    }
+
+
     fun addOrder(orderData: OrderDTO): Call<OrderDTO> {
         return RetrofitClient.apiService.addOrder(orderData)
     }

@@ -1,4 +1,4 @@
-package com.savelyev.MobileApp.Api.DTO
+package com.savelyev.MobileApp.Api.DTO.Request
 
 data class AuthData (
     val numberPhone: String,
