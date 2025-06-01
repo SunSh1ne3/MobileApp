@@ -41,6 +41,9 @@ interface ApiService {
     @GET("api/v1/bicycle")
     fun getBicycles(): Call<List<BikeDTO>>
 
+    @POST("api/v1/bicycle")
+    fun addBicycle(@Body bicycleData: BikeDTO): Call<BikeDTO>
+
     @GET("api/v1/bicycle/name/{name}")
     fun getBicycle(@Path("name") name: String?): Call<BikeDTO>
 
@@ -53,10 +56,10 @@ interface ApiService {
     @GET("api/v1/bicycle/parameters/types/{id_type}")
     fun getTypeBicycle(@Path("id_type") typeID: Int?): Call<TypeBicycleDTO>
 
-    @GET("api/v1/bicycle/parameters/types/")
+    @GET("api/v1/bicycle/parameters/types")
     fun getTypesBicycle(): Call<List<TypeBicycleDTO>>
 
-    @GET("api/v1/bicycle/parameters/brakes/")
+    @GET("api/v1/bicycle/parameters/brakes")
     fun getTypesBrakesBicycle(): Call<List<TypeBrakesDTO>>
 
     //Order

@@ -28,8 +28,8 @@ import java.util.concurrent.TimeUnit
 
 @SuppressLint("StaticFieldLeak")
 object RetrofitClient {
-    private const val BASE_URL = "http://10.0.2.2:8080/"
-    //private const val BASE_URL = "https://placidly-scholarly-bluejay.cloudpub.ru/"
+    //private const val BASE_URL = "http://10.0.2.2:8080/"
+    private const val BASE_URL = "https://placidly-scholarly-bluejay.cloudpub.ru/"
 
 
     private lateinit var okHttpClient: OkHttpClient

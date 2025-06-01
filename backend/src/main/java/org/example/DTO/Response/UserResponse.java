@@ -7,7 +7,7 @@ public class UserResponse {
     private Integer id;
     private String username;
     private String numberPhone;
-    private String userRole ;
+    private String userRole;
 
     public UserResponse(User user) {
         this.id = user.getId();

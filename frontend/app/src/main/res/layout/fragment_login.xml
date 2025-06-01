@@ -46,8 +46,7 @@
             android:hint="@string/PHONE_TEXT">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPhone"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
+                style="@style/InputTextStyle"
                 android:inputType="phone"
                 android:maxLength="18"
                 android:drawableStart="@drawable/ic_phone"
@@ -57,12 +56,10 @@
     <!-- Поле: Пароль -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/InputFieldStyle"
-            android:hint="@string/PASSWORD_TEXT"
-            android:layout_marginTop="4dp">
+            android:hint="@string/PASSWORD_TEXT">
             <com.google.android.material.textfield.TextInputEditText
+                style="@style/InputTextStyle"
                 android:id="@+id/etPassword"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
                 android:inputType="textPassword"
                 android:drawableStart="@drawable/ic_lock"
                 android:drawablePadding="12dp"/>

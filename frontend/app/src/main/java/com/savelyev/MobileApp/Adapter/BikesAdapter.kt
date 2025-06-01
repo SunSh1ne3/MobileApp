@@ -56,8 +56,8 @@ class BikesAdapter(private var context: ListFragment) :
             itemView.findViewById<TextView>(R.id.NameBike).text = mBike.name
             val imageView = itemView.findViewById<ImageView>(R.id.bicycle_image)
 
-            if (mBike.images.isNotEmpty()) {
-                val imagePath = mBike.images[0].imagePath
+//            if (mBike.images?.isNotEmpty() == true) {
+//                val imagePath = mBike.images[0].imagePath
                 //TODO: работа с фаалми буедт позже
                 //TODO: все работает, но надо подключать нормально через S3
 
@@ -77,9 +77,9 @@ class BikesAdapter(private var context: ListFragment) :
 //                        .error(R.drawable.error)
 //                        .into(imageView)
 //                }
-            } else {
-                imageView.setImageResource(R.drawable.ic_image_with_error)
-            }
+//            } else {
+//                imageView.setImageResource(R.drawable.ic_image_with_error)
+//            }
         }
     }
 

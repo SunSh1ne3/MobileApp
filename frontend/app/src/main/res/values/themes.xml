@@ -26,10 +26,31 @@
     </style>
 
     <style name="InputFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/blue</item>
-        <item name="hintTextColor">@color/blue</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="boxStrokeColor">@color/blue</item>
+        <item name="hintTextColor">@color/grey</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:background">@color/white</item>
+    </style>
+    <style name="InputTextStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="SpinnerStyle" parent="Widget.AppCompat.Spinner">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:background">@drawable/spinner_border</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="boxStrokeColor">@color/black</item>
+        <item name="hintTextColor">@color/grey</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:spinnerMode">dropdown</item>
+        <item name="android:layout_marginTop">8dp</item>
     </style>
 
     <style name="ButtonPrimary" parent="Widget.MaterialComponents.Button">

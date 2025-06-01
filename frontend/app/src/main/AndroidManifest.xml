@@ -10,7 +10,7 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/ic_bicycle"
+        android:icon="@drawable/ic_main"
         android:label="@string/APP_NAME"
         android:roundIcon="@drawable/ic_bicycle"
         android:supportsRtl="true"

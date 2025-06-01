@@ -123,6 +123,10 @@ class ContentActivity : AppCompatActivity() {
                 toolbar.visibility = View.GONE
                 bottomNav.visibility = View.GONE
             }
+            R.id.addBicycleFragment -> {
+                toolbar.visibility = View.VISIBLE
+                bottomNav.visibility = View.GONE
+            }
             else -> {
                 toolbar.visibility = View.VISIBLE
                 bottomNav.visibility = View.VISIBLE
@@ -143,7 +147,7 @@ class ContentActivity : AppCompatActivity() {
                 else -> -1
             }
             if (selectedItemId != -1 && bottomNav.selectedItemId != selectedItemId) {
-                bottomNav.selectedItemId = selectedItemId as Int
+                bottomNav.selectedItemId = selectedItemId
             }
         }
     }

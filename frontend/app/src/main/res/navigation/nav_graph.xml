@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_listFragment_to_cardElementFragment"
             app:destination="@id/cardElementFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_addBicycleFragment"
+            app:destination="@id/addBicycleFragment" />
     </fragment>
 
     <fragment
@@ -27,6 +30,12 @@
             android:name="bikeName"
             android:defaultValue="Велосипед"
             app:argType="string"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/addBicycleFragment"
+        android:name="com.savelyev.MobileApp.Fragment.AddBicycleFragment"
+        android:label="Добавление велосипеда">
     </fragment>
 
     <fragment

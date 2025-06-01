@@ -187,7 +187,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/CONFIRM_RETURN_BUTTON"
                 android:textColor="@color/white"
-                app:backgroundTint="@color/light_blue"
+                app:backgroundTint="@color/blue"
                 app:icon="@drawable/ic_check"
                 app:iconTint="@color/white"
                 app:strokeColor="@color/blue"

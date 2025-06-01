@@ -1,0 +1,123 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/PageStyle">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Обязательные поля -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/InputFieldStyle"
+            android:hint="Название*">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/InputFieldStyle"
+            android:hint="Тип тормозов"
+            app:helperText="Выберите тип тормозной системы*">
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnerBrakes"
+                style="@style/SpinnerStyle" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/InputFieldStyle"
+            android:hint="Тип велосипеда"
+            app:helperText="Выберите тип тип велосипеда*">
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnerBicycleType"
+                style="@style/SpinnerStyle"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/InputFieldStyle"
+            android:hint="Вес (кг)">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etWeight"
+
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/InputFieldStyle"
+            android:hint="Материал рамы"
+            android:layout_marginTop="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFrameMaterial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/InputFieldStyle"
+            android:hint="Размер колес ('')">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etWheelSize"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/InputFieldStyle"
+            android:hint="Возраст (лет)">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etAge"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/InputFieldStyle"
+            android:hint="Количество скоростей">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSpeeds"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/InputFieldStyle"
+            android:hint="Максимальная нагрузка (кг)">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etMaxLoad"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/blue"
+            android:text="Добавить"
+            android:layout_marginTop="24dp"/>
+
+    </LinearLayout>
+</ScrollView>

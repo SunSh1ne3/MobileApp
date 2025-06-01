@@ -2,21 +2,25 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/PageStyle">
+    style="@style/PageStyle"
+    android:fillViewport="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="8dp">
 
         <!-- Шапка профиля -->
         <RelativeLayout
+            android:id="@+id/profile_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:background="@drawable/bg_profile_header"
-            android:elevation="4dp">
+            android:elevation="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
@@ -69,24 +73,34 @@
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
             android:background="@drawable/bg_rounded_card"
-            android:padding="16dp">
+            android:padding="16dp"
+
+            app:layout_constraintTop_toBottomOf="@id/profile_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="История заказов"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                />
         </LinearLayout>
 
         <!-- Настройки -->
         <TextView
+            android:id="@+id/setting_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Настройки"
             android:textColor="@color/black"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/history_order_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -94,7 +108,11 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_rounded_card"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/setting_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <com.savelyev.MobileApp.View.SettingItemView
                 android:layout_width="match_parent"
@@ -122,7 +140,10 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_rounded_card"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <Button
                 android:id="@+id/btn_logout"
@@ -141,5 +162,5 @@
                 android:text="Удалить аккаунт"
                 android:textColor="@color/white" />
         </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

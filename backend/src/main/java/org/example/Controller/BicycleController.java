@@ -117,7 +117,7 @@ public class BicycleController {
     public ResponseEntity<Object> addBicycle(@RequestBody Bicycle bicycleData) {
         try {
             Bicycle bicycle = bicycleService.addBicycle(bicycleData);
-            return ResponseEntity.ok(bicycle);
+             return ResponseEntity.ok(bicycle);
         }
         catch (Exception e) {
             e.printStackTrace();

@@ -112,6 +112,7 @@ class CardElementFragment : Fragment() {
         addButton = root.findViewById(R.id.addButton)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupListeners() {
         addButton.setOnClickListener {
             val userId = UserManager.getCurrentUser()?.id
@@ -313,7 +314,7 @@ class CardElementFragment : Fragment() {
                 setupData(bikeData, root)
                 //TODO: работа с файлами будет позже
                 //TODO: все работает, но надо подключать нормально через S3
-                //loadImage(bikeData,root)
+                loadImage(bikeData,root)
             } else {
                 PushManager.showToast("Ошибка загрузки данных, повторите попытку.")
             }
@@ -321,11 +322,14 @@ class CardElementFragment : Fragment() {
     }
 
     private fun loadImage(bikeData: BikeDTO, root: View){
-        val imageUrls = bikeData.images
+        val imageUrls = bikeData.images;
         val viewPager = root.findViewById<ViewPager2>(R.id.viewPager)
-        Log.d("ImageLoading", "Размер списка imageUrls: ${imageUrls.size}")
-        val adapter = ImageBicycleAdapter(requireContext(), imageUrls)
-        viewPager.adapter = adapter
+        if (imageUrls != null) {
+            Log.d("ImageLoading", "Размер списка imageUrls: ${imageUrls.size}")
+            val adapter = ImageBicycleAdapter(requireContext(), imageUrls)
+            viewPager.adapter = adapter
+        }
+
 
         // Для эффекта карусели (необязательно)
         viewPager.offscreenPageLimit = 1

@@ -267,6 +267,7 @@ class OrderFragment : Fragment(), OrdersAdapter.OrderBindingInterface {
             fetchIssuedOrders()
             recyclerView.visibility = View.VISIBLE
             emptyStateLayout.visibility = View.GONE
+            bottomLayout.visibility = View.GONE
         } else {
             orderAdapter.clearLists()
         }
@@ -306,14 +307,14 @@ class OrderFragment : Fragment(), OrdersAdapter.OrderBindingInterface {
             }
         }
 
-        bottomLayout.visibility = if (total > 0 || (isManager && allPaid)) View.VISIBLE else View.GONE
+        bottomLayout.visibility = if (total > 0 || (isManager && allPaid && !btnActiveOrders.isSelected)) View.VISIBLE else View.GONE
     }
 
 
     override fun showEmptyState(show: Boolean) {
         if (progressBar.visibility == View.GONE) {
             emptyStateLayout.visibility = if (show && !UserManager.isAdminOrManager()) View.VISIBLE else View.GONE
-            bottomLayout.visibility = if (show) View.GONE else View.VISIBLE
+            bottomLayout.visibility = if (show || btnActiveOrders.isSelected) View.GONE else View.VISIBLE
             recyclerView.visibility = if (show) View.GONE else View.VISIBLE
         }
     }

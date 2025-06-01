@@ -12,12 +12,14 @@ import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.navigation.fragment.findNavController
 import com.savelyev.MobileApp.Utils.TimeManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.savelyev.MobileApp.Activity.ContentActivity
 import com.savelyev.MobileApp.Adapter.BikesAdapter
 import com.savelyev.MobileApp.Api.DTO.Enum.StatusEnum
 import com.savelyev.MobileApp.Api.DTO.OrderDTO
@@ -108,6 +110,10 @@ class ListFragment : Fragment() {
             } else {
                 PushManager.showToast("Нет активных заказов")
             }
+        }
+
+        (requireActivity() as ContentActivity).setAddBicycleButtonListener {
+            findNavController().navigate(R.id.action_listFragment_to_addBicycleFragment)
         }
     }
 

@@ -110,7 +110,7 @@ class BikesService {
                 if (response.isSuccessful) {
                     callback(response.body())
                 } else {
-                    callback(null) // TODO: Обработка ошибки
+                    callback(null)
                 }
             }
 
@@ -129,12 +129,56 @@ class BikesService {
                 if (response.isSuccessful) {
                     callback(response.body())
                 } else {
-                    callback(null) // TODO: Обработка ошибки
+                    callback(null)
                 }
             }
 
             override fun onFailure(call: Call<TypeBicycleDTO>, t: Throwable) {
                 Log.e("GetData", "Ошибка: ${t.message}")
+                callback(null)
+            }
+        })
+    }
+
+    fun addBicycle(bicycle: BikeDTO, callback: (BikeDTO?) -> Unit) {
+        val call = bikeRepository.addBicycle(bicycle)
+        call.enqueue(object : Callback<BikeDTO> {
+            override fun onResponse(call: Call<BikeDTO>, response: Response<BikeDTO>) {
+
+                when {
+                    response.isSuccessful -> {
+                        callback(response.body())
+                    }
+                    response.code() == 401 -> {
+                        Log.e("BikeAPI", "Unauthorized error: ${response.errorBody()?.string()}")
+                        // Можно добавить автоматическое обновление токена здесь
+                        callback(null)
+                    }
+                    response.code() == 403 -> {
+                        Log.e("BikeAPI", "Forbidden error: ${response.errorBody()?.string()}")
+                        Log.e("BikeAPI", "Auth token: ${call.request().header("Authorization")}")
+                        callback(null)
+                    }
+                    else -> {
+                        Log.e("BikeAPI", "Error response: ${response.code()} - ${response.errorBody()?.string()}")
+                        callback(null)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<BikeDTO>, t: Throwable) {
+                Log.e("BikeAPI", "Request failed to ${call.request().url}", t)
+                when (t) {
+                    is IOException -> {
+                        Log.e("BikeAPI", "Network error: ${t.message}")
+                    }
+                    is HttpException -> {
+                        Log.e("BikeAPI", "HTTP error: ${t.code()} - ${t.message()}")
+                    }
+                    else -> {
+                        Log.e("BikeAPI", "Unexpected error: ${t.javaClass.simpleName}", t)
+                    }
+                }
                 callback(null)
             }
         })
@@ -187,4 +231,5 @@ class BikesService {
             }
         }
     }
+
 }

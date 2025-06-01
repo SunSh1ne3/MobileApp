@@ -10,6 +10,9 @@ class BikeRepository {
     fun getBicycleList(): Call<List<BikeDTO>> {
         return RetrofitClient.apiService.getBicycles()
     }
+    fun addBicycle(bicycleData: BikeDTO): Call<BikeDTO> {
+        return RetrofitClient.apiService.addBicycle(bicycleData)
+    }
 
     fun getBicycle(name: String?): Call<BikeDTO> {
         return RetrofitClient.apiService.getBicycle(name)
@@ -27,11 +30,12 @@ class BikeRepository {
         return RetrofitClient.apiService.getTypeBrakeBicycle(idBrake)
     }
 
+    fun getTypesBrakes(): Call<List<TypeBrakesDTO>> {
+        return RetrofitClient.apiService.getTypesBrakesBicycle()
+    }
     fun getTypesBicycle(): Call<List<TypeBicycleDTO>> {
         return RetrofitClient.apiService.getTypesBicycle()
     }
 
-    fun getTypesBrakes(): Call<List<TypeBrakesDTO>> {
-        return RetrofitClient.apiService.getTypesBrakesBicycle()
-    }
+
 }

@@ -18,6 +18,7 @@
     <string name="MSG_ERROR_EMPTY_FIELD">Некоторые поля пустые</string>
     <string name="MSG_ERROR_EMPTY_PHONE">Введите номер телефона</string>
     <string name="MSG_ERROR_EMPTY_PASSWORD">Введите пароль</string>
+    <string name="MSG_ERROR_EMPTY_NAME">Введите название</string>
     <string name="MSG_ERROR_INVALID_SESSION">Неверный логин или пароль</string>
     <string name="MSG_ERROR_REGISTRATION_FAILED">Ошибка регистрации</string>
     <string name="MSG_ERROR_AUTO_AUTH_FAILED">Ошибка автоматического входа</string>
@@ -43,6 +44,9 @@
     <string name="CASH_PAYMENT_TITLE">Оплата наличными</string>
     <string name="CASH_PAYMENT_INFO_MESSAGE">Не забудьте оплатить заказ при получении</string>
 
+    <string name="EMPTY_DATA_FIELD">Нет данных</string>
+
+
 
     <string name="CONFIRM">Подтвердить</string>
     <string name="CANCEL">Отмена</string>
@@ -60,6 +64,4 @@
     <string name="CONFIRM_RETURN_BUTTON">Подтвердить возврат</string>
     <string name="AUTH_TITLE">Войдите, чтобы начать</string>
     <string name="REGISTRATION_TITLE">Создайте аккаунт</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

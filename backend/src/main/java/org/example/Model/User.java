@@ -1,5 +1,6 @@
 package org.example.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.example.DTO.UserRoleEnum;
 
@@ -11,6 +12,7 @@ public class User {
     @Column(name = "id_user")
     private Integer id;
     private String username;
+    @JsonIgnore
     private String password;
     @Column(name = "number_phone", unique = true)
     private String numberPhone;

@@ -1,6 +1,7 @@
 package org.example.Security;
 
 import org.example.Config.RequestLoggingFilter;
+import org.example.DTO.UserRoleEnum;
 import org.example.Service.CustomUserDetailsService;
 import org.example.Service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;

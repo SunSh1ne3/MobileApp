@@ -14,10 +14,6 @@ class TokenManager(context: Context) {
         }
     }
 
-    fun getData() {
-        Log.d(tag, "AllData: ${ tokenPreferences.getAllData()}...")
-    }
-
     fun getToken(): String? {
         return tokenPreferences.getString(PreferencesManager.JWT_TOKEN)
     }

@@ -46,14 +46,12 @@ class QrCodeAnalyzer(
 
             scanner.process(image)
                 .addOnSuccessListener { barcodes: List<Barcode> ->
-                    Log.d("QR_DEBUG", "Found ${barcodes.size} barcodes")
                     barcodes.firstOrNull { barcode ->
                         isQrInFrame(barcode, imageProxy)
                     }?.rawValue?.let(onQrScanned)
                 }
                 .addOnCompleteListener {
                     imageProxy.close()
-                    Log.d("QR_DEBUG", "Frame processing completed")
                 }
         } catch (e: Exception) {
             Log.e("QR_DEBUG", "Analyze failed", e)
